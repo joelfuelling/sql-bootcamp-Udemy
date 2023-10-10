@@ -57,7 +57,7 @@ The DISTINCT keyword operates on a column and returns only the distinct values i
 <br/>
 <br/>
 
-```
+```SQL
 SELECT DISTINCT column_name FROM table_name
 ```
 
@@ -66,7 +66,7 @@ Or, you can place the column name in parenthesis
 <br />
 <br />
 
-```
+```SQL
 SELECT DISTINCT(column_name) FROM table_name
 ```
 
@@ -79,7 +79,7 @@ What if we have two of the same distinct instance within a column? We don't know
 
 1. How many different release years do we have? One, 2006 (results from query shown below).
 
-```
+```SQL
 SELECT DISTINCT release_year FROM film
 ```
 
@@ -87,7 +87,7 @@ SELECT DISTINCT release_year FROM film
 
 2. How many different rental_rates are there? Three,
 
-```
+```SQL
 SELECT DISTINCT (rental_rate) FROM film
 ```
 
@@ -101,7 +101,7 @@ Let's say we have a visitor from Australia who't not familiar with our movie rat
    "PG-13" and
    "G"
 
-```
+```SQL
 SELECT DISTINCT rating FROM film;
 ```
 
@@ -113,14 +113,14 @@ SELECT DISTINCT rating FROM film;
 
 By default the count function returns the number of input rows of a table.
 
-```
+```SQL
 SELECT COUNT(*) FROM table_name
 ```
 
 <br /><br />
 By including a argument, the returned query will then match that specific argument/condition.
 
-```
+```SQL
 SELECT COUNT(first_name) FROM table_name
 ```
 
@@ -146,7 +146,7 @@ Along with comparison operators, there are 3 logical operators.
 - NOT - returns true if the condition is false
   <br/><br/>
 
-```
+```SQL
 SELECT first_name, choice FROM table_name
 WHERE name = 'David'
 AND choice = 'red'
@@ -157,7 +157,7 @@ How would we find the number of films with a rating or R or PG-13?
 <br/>
 <br/>
 
-```
+```SQL
 SELECT COUNT(*) FROM film
 WHERE rating = 'R'
 OR rating = 'PG-13'
@@ -174,7 +174,7 @@ One of the most fundamental statements alongside SELECT. With Where, we can spec
 
 You can combine these in any fashion as long as spelling and syntax are correct. For example, we want the phone # from the customer with the address of '259 Ipoh Drive...
 
-```
+```SQLSQL
 SELECT customer FROM customer
 WHERE address = '259 Ipoh Drive'
 ```
@@ -191,7 +191,7 @@ Basic syntax for ORDER BY...
 - Use ASC for ascending order _(Default if left blank)_
 - Use DESC for descending order
 
-```
+```SQLSQL
 SELECT column_1, column_2 FROM table_name
 ORDER BY column_1 ASC/DESC
 ```
@@ -213,7 +213,7 @@ You can use ORDER BY on multiple columns. This makes a lot of sense with duplica
 <br />
 To sort by company and then sales in descending order:
 
-```
+```SQL
 SELECT company, sales FROM table
 ORDER BY company, sales
 ```
@@ -244,7 +244,7 @@ ORDER BY company, sales
 
 ### Limit Syntax:
 
-```
+```SQL
 SELECT * FROM payment
 WHERE amount != 0.00
 ORDER BY payment_date DESC
@@ -265,7 +265,7 @@ This will return 5 recent payments (not 0) ordered by the payment date in descen
  We want to reward the first 10 customers who made a payment. Write a query to gather the customer_ids.
 <br />
 
-```
+```SQL
 SELECT customer_id FROM payment
 ORDER BY payment_date ASC
 LIMIT 10
@@ -277,7 +277,7 @@ LIMIT 10
 2.
 </span> A customer wants to quickly rent a video over their short lunch break. What are the titles of the 5 shortest (length of runtime) movies?
 
-```
+```SQL
 SELECT title FROM film
 ORDER BY length ASC
 limit 5
@@ -285,7 +285,7 @@ limit 5
 
 Now that we know the shortest runtime ('length') is 46 minutes, we can query for how many films there are with that runtime instead of just returning 5. Coincidentally, there are 5 in this example for both queries.
 
-```
+```SQL
 SELECT title FROM film
 WHERE length = '46'
 ```
@@ -301,7 +301,7 @@ BONUS:
 </span>
 If the previous customer can watch any movie that is 50 minutes or less in run time, how many options does she have? Answer: 37.
 
-```
+```SQL
 SELECT COUNT(title) FROM film
 WHERE length <= '50'
 ```
@@ -330,13 +330,13 @@ Combining NOT with BETWEEN...
 
 We can also use this on dates using the following syntax:
 
-```
+```SQL
 date_column BETWEEN start_date AND end_date
 ```
 
 OR...
 
-```
+```SQL
 date BETWEEN '2007-01-01' AND '2007-02-01'
 ```
 
@@ -348,14 +348,14 @@ date BETWEEN '2007-01-01' AND '2007-02-01'
 <br />
 How many payments are there above, or below 9 dollars? <br />Answer: 14157
 
-```
+```SQL
 SELECT count(*) from payment
 WHERE amount NOT BETWEEN 8 and 9
 ```
 
 How many payments were there between February 1st, 2007, and February 15th, 2007?
 
-```
+```SQL
 SELECT * FROM payment
 WHERE payment_date BETWEEN '2007-02-01' AND '2007-02-15'
 ```
@@ -371,20 +371,20 @@ Remember Note 2. above? Here we have an example of this. We're only returning pa
 
 Syntax:
 
-- ```
+- ```SQL
   value IN (option1, option2,...,option_n)
   ```
-- ```
+- ```SQL
   WHERE color IN ('red', 'blue')
   ```
   <span style="color: lightGreen">NOT IN example:</span>
-- ```
+- ```SQL
   WHERE color NOT IN ('green', 'blue')
   ```
 
 Let's say we want to know the number of payments that are not '0.99', '1.98', or '1.99'.
 
-```
+```SQL
 SELECT * from payment
 WHERE amount NOT IN (0.99, 1.98, 1.99)
 ORDER BY amount ASC
@@ -420,9 +420,9 @@ The LIKE operator allows us to perform pattern matching against string data with
 
 <br />
 
-You can use ANY combinations of \_ and %! Let's find the first_name and email of anyone who has an 'er' in their name - How? Br wrapping % on both sides of what we're looking for we're asking for "any 'er' with any other chracters on either side".
+You can use ANY combinations of \_ and %! Let's find the first_name and email of anyone who has an 'er' in their name - How? Br wrapping % on both sides of what we're looking for we're asking for "any 'er' with any other characters on either side".
 
-```
+```sql
 SELECT first_name, email from customer
 WHERE first_name ILIKE '%er%'
 ```
@@ -449,14 +449,14 @@ NOTE:
 
 Get all customer that are some letter, followed by 'her', then any combination of letter.
 
-```
+```sql
 SELECT first_name FROM customer
 WHERE first_name LIKE '_her%'
 ```
 
 How many peoples name starts with just the letter J?
 
-```
+```sql
 SELECT count(*) FROM customer
 WHERE first_name LIKE 'J%'
 ```
@@ -468,31 +468,31 @@ WHERE first_name LIKE 'J%'
 # <span style="color: purple; font-style: italic">CHALLENGE! 😰</span>
 
 1. How many payment transactions were greater than $5.00?
-   - ```
+   - ```sql
       SELECT COUNT(*) FROM payment
       WHERE amount > 5.00
      ```
 2. How many actors have a first name that starts with a letter P?
-   - ```
+   - ```sql
       SELECT COUNT(actor) FROM actor
       WHERE first_name LIKE 'P%'
      ```
 3. How many unique districts are our customers from?
-   - ```
+   - ```sql
      SELECT DISTINCT (COUNT(district)) from address
      ```
 4. Retrieve the list of names for those distinct districts from the previous question.
-   - ```
+   - ```sql
      SELECT DISTINCT (district) from address
      ```
 5. How many films have a rating of R and a replacement cost between $5 and $15? Answer: 52.
-   - ```
+   - ```sql
      SELECT COUNT(FILM) FROM film
      WHERE rating = 'R'
      AND replacement_cost BETWEEN 5 AND 15
      ```
 6. How many films have the word Truman somewhere in the title?
-   - ```
+   - ```sql
      SELECT COUNT(*) FROM film
      WHERE title LIKE '%Truman%'
      ```
