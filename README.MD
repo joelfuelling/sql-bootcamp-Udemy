@@ -299,7 +299,7 @@ WHERE length = '46'
 <span style="color: orange">
 BONUS:
 </span>
-If the previous customer can watch any movie that is 50 minutes or less in run time, how many options does she have?
+If the previous customer can watch any movie that is 50 minutes or less in run time, how many options does she have? Answer: 37.
 
 ```
 SELECT COUNT(title) FROM film
@@ -313,15 +313,15 @@ WHERE length <= '50'
 
 Can be used to match a value against a range of values
 
-- Valid BETWEEN low AND high.
-- Value >= low AND value <= high.
-- Note that we include the low and high...
+- Value BETWEEN low AND high.
+- (Value >= low) AND (value <= high).
+- We include the low and high...
 
 Combining NOT with BETWEEN...
 
 - value NOT BETWEEN low and HIGH.
-- value < low OR value > high
-- Notes that we DO NOT include the low and high, only the value in between them.
+- (value < low) OR (value > high)
+- We DO NOT include the low and high, only the value in between them.
 
 <br/>
 <br/>
@@ -360,7 +360,7 @@ SELECT * FROM payment
 WHERE payment_date BETWEEN '2007-02-01' AND '2007-02-15'
 ```
 
-Remember Note 2. above? Here we have an example of this. We're only returning payments up to 2007-02-15, but not including them. We may want to include payments from the 15th, in which case we would search BETWEEN ... and '2007-02-16'
+Remember Note 2. above? Here we have an example of this. We're only returning payments up to 2007-02-15, but not including them. We may want to include payments from the 15th, in which case we would search BETWEEN '2007-02-01' and '2007-02-16'
 
 <br /><br />
 
@@ -389,3 +389,110 @@ SELECT * from payment
 WHERE amount NOT IN (0.99, 1.98, 1.99)
 ORDER BY amount ASC
 ```
+
+<br />
+<br />
+
+# LIKE and ILIKE
+
+What if we want to match against a general pattern in a string?
+
+- All emails ending in '@gmail.com'.
+- All names that begin with an 'A'.
+
+The LIKE operator allows us to perform pattern matching against string data with the use of <span style="color: #ff6941">wildcard</span> characters:
+
+- <span style="color: #ff6941; font-size: 24px">Percent %</span>
+  - Matches any sequence of characters
+- <span style="color: #ff6941; font-size: 24px">Underscore \_</span>
+  - Matches any single character.
+
+<br />
+
+## Using %
+
+- All names that <span style="color: orange">begin</span> with an 'A'.
+  - WHERE name LIKE <span style="color: orange">'A%'</span>
+  - Saying: match any name where the first letter is 'A' followed by and sequence of characters.
+- All names that <span style="color: orange">end</span> with an 'a'
+  - WHERE name LIKE <span style="color: orange">'%a'</span>
+  - Saying: match any name where the last letter is 'a', preceded by and sequence of characters.
+
+<br />
+
+You can use ANY combinations of \_ and %! Let's find the first_name and email of anyone who has an 'er' in their name - How? Br wrapping % on both sides of what we're looking for we're asking for "any 'er' with any other chracters on either side".
+
+```
+SELECT first_name, email from customer
+WHERE first_name ILIKE '%er%'
+```
+
+<br />
+
+NOTE:
+
+- <span style="color: lightGreen"> LIKE is case-sensitive, </span>
+- <span style="color: lightGreen"> <span style="color: red">I</span>LIKE is case-<span style="color: red">in</span>sensitive, </span>
+
+<br />
+ 
+## Using \_
+
+Using the underscore allows us to replace just a single character.
+
+<br />
+
+NOTE:
+
+- <span style="color: lightGreen">You can combine LIKE and ILIKE operators for far greater detail
+- <span style="color: lightGreen"><span style="background: darkred">REGEX expressions are fully supported in SQL!</span>
+
+Get all customer that are some letter, followed by 'her', then any combination of letter.
+
+```
+SELECT first_name FROM customer
+WHERE first_name LIKE '_her%'
+```
+
+How many peoples name starts with just the letter J?
+
+```
+SELECT count(*) FROM customer
+WHERE first_name LIKE 'J%'
+```
+
+<br />
+<br />
+<br />
+
+# <span style="color: purple; font-style: italic">CHALLENGE! 😰</span>
+
+1. How many payment transactions were greater than $5.00?
+   - ```
+      SELECT COUNT(*) FROM payment
+      WHERE amount > 5.00
+     ```
+2. How many actors have a first name that starts with a letter P?
+   - ```
+      SELECT COUNT(actor) FROM actor
+      WHERE first_name LIKE 'P%'
+     ```
+3. How many unique districts are our customers from?
+   - ```
+     SELECT DISTINCT (COUNT(district)) from address
+     ```
+4. Retrieve the list of names for those distinct districts from the previous question.
+   - ```
+     SELECT DISTINCT (district) from address
+     ```
+5. How many films have a rating of R and a replacement cost between $5 and $15? Answer: 52.
+   - ```
+     SELECT COUNT(FILM) FROM film
+     WHERE rating = 'R'
+     AND replacement_cost BETWEEN 5 AND 15
+     ```
+6. How many films have the word Truman somewhere in the title?
+   - ```
+     SELECT COUNT(*) FROM film
+     WHERE title LIKE '%Truman%'
+     ```
