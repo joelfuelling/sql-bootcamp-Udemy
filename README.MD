@@ -33,7 +33,7 @@ For this tutorial we'll be using PostgreSQL, but keep in mind there are many oth
 
 </br>
 
-### NOTE: We'll use <span style="color: yellow">yellow text</span> to note when we are using a PostGreSQL specific command.
+<span style="font-size: 18px">NOTE:</span> <span style="color: lightgreen">We'll use <span style="color: yellow">yellow text</span> to note when we are using a PostGreSQL specific command.</span>
 
 <br />
 <br />
@@ -230,7 +230,7 @@ ORDER BY company, sales
 
 <BR />
 
-### NOTE: <span style="color: lightgreen">You can sort by columns you didn't include in your query request statement. SQL knows that those fields are still there and can access them for purposes outside those we've seen so far.</span>
+<span style="font-size: 18px">NOTE:</span> <span style="color: lightgreen">You can sort by columns you didn't include in your query request statement. SQL knows that those fields are still there and can access them for purposes outside those we've seen so far.</span>
 
 <br />
 <br />
@@ -252,3 +252,140 @@ LIMIT(5)
 ```
 
 This will return 5 recent payments (not 0) ordered by the payment date in descending order.
+<br/>
+<br/>
+<br/>
+
+# <span style="color: orange">POP QUIZ:</span>
+
+<br />
+
+<span style="color: orange">
+1.</span>
+ We want to reward the first 10 customers who made a payment. Write a query to gather the customer_ids.
+<br />
+
+```
+SELECT customer_id FROM payment
+ORDER BY payment_date ASC
+LIMIT 10
+```
+
+<br />
+
+<span style="color: orange">
+2.
+</span> A customer wants to quickly rent a video over their short lunch break. What are the titles of the 5 shortest (length of runtime) movies?
+
+```
+SELECT title FROM film
+ORDER BY length ASC
+limit 5
+```
+
+Now that we know the shortest runtime ('length') is 46 minutes, we can query for how many films there are with that runtime instead of just returning 5. Coincidentally, there are 5 in this example for both queries.
+
+```
+SELECT title FROM film
+WHERE length = '46'
+```
+
+<br />
+<span style="font-size: 18px">NOTE:</span> 
+<span style="color: lightgreen">'length' is actually a SQL keyword (which is why it's highlighted in PgAdmin), so be careful where you call it as a column name. Do your best to avoid column names that are the same as SQL keywords..</span>
+<br />
+<br />
+
+<span style="color: orange">
+BONUS:
+</span>
+If the previous customer can watch any movie that is 50 minutes or less in run time, how many options does she have?
+
+```
+SELECT COUNT(title) FROM film
+WHERE length <= '50'
+```
+
+<br />
+<br />
+
+# Between
+
+Can be used to match a value against a range of values
+
+- Valid BETWEEN low AND high.
+- Value >= low AND value <= high.
+- Note that we include the low and high...
+
+Combining NOT with BETWEEN...
+
+- value NOT BETWEEN low and HIGH.
+- value < low OR value > high
+- Notes that we DO NOT include the low and high, only the value in between them.
+
+<br/>
+<br/>
+
+## BETWEEN with DATES!
+
+We can also use this on dates using the following syntax:
+
+```
+date_column BETWEEN start_date AND end_date
+```
+
+OR...
+
+```
+date BETWEEN '2007-01-01' AND '2007-02-01'
+```
+
+<span style="font-size: 18px">NOTE:</span>
+
+1. <span style="color: lightgreen">You need to format dates in the ISO 8601 standard format, which is YYYY-MM-DD.</span>
+2. <span style="color: lightgreen">When using BETWEEN operator with dates that also include timestamp information, pay careful attention to using BETWEEN versus <=, >= comparison operators, due to the fact that a datetime start with <span style="color: red">0:00.</span>
+
+<br />
+How many payments are there above, or below 9 dollars? <br />Answer: 14157
+
+```
+SELECT count(*) from payment
+WHERE amount NOT BETWEEN 8 and 9
+```
+
+How many payments were there between February 1st, 2007, and February 15th, 2007?
+
+```
+SELECT * FROM payment
+WHERE payment_date BETWEEN '2007-02-01' AND '2007-02-15'
+```
+
+Remember Note 2. above? Here we have an example of this. We're only returning payments up to 2007-02-15, but not including them. We may want to include payments from the 15th, in which case we would search BETWEEN ... and '2007-02-16'
+
+<br /><br />
+
+# ~ IN ~
+
+- You may want to check for multiple possible value options, for example, ir a user's name shows up IN/NOT IN list of options.
+- We can use the IN/NOT IN operator to create a condition that checks to see if a value is included in a list of multiple options.
+
+Syntax:
+
+- ```
+  value IN (option1, option2,...,option_n)
+  ```
+- ```
+  WHERE color IN ('red', 'blue')
+  ```
+  <span style="color: lightGreen">NOT IN example:</span>
+- ```
+  WHERE color NOT IN ('green', 'blue')
+  ```
+
+Let's say we want to know the number of payments that are not '0.99', '1.98', or '1.99'.
+
+```
+SELECT * from payment
+WHERE amount NOT IN (0.99, 1.98, 1.99)
+ORDER BY amount ASC
+```
