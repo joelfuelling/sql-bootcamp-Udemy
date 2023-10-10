@@ -9,7 +9,7 @@ Databases are systems that allow users to store and organize data, GREAT with la
 <p>The first step to becoming a database administrator is to learn how to use spreadsheets. </p>
 
 - Spreadsheets are great for small data sets, or a one-time analysis.
-- Reasonably sized data set can be used
+- Reasonably sized data sets can be used
 - Ability for untrained people to work with data.
 
 </br>
@@ -27,9 +27,9 @@ Then we can move on to databases once we understand the spreadsheet.
 Databases have columns and rows just like a spreadsheet, but rather than a 'tab', we have individual 'tables' that contain a given dataset.</br>
 </br>
 </br>
-For this tutorial we'll be using PostgreSQL, but keep in mind there are many other approaches and abstractions to working in SQL...
+For this tutorial, we'll be using PostgreSQL, but keep in mind there are many other approaches and abstractions to working in SQL...
 
-- MySQL, Oracle Databases, Microsoft Access, Amazon's Redshift, MemSQL, Periscope DAta, Hive (runs on top of hadoop), Google's BigQuery, Facebook's Presto.
+- MySQL, Oracle Databases, Microsoft Access, Amazon's Redshift, MemSQL, Periscope Data, Hive (runs on top of hadoop), Google's BigQuery, Facebook's Presto.
 
 </br>
 
@@ -40,10 +40,10 @@ For this tutorial we'll be using PostgreSQL, but keep in mind there are many oth
 
 # SQL Syntax (can all be applied to any SQL database)
 
-We use all caps for the SQL commands (though we could do lowercase) to differentiate them from the column, rows, or data objects we're accessing.
+We use all caps for the SQL commands (though we could do lowercase) to differentiate them from the columns, rows, or data objects we're accessing.
 
 <br />
-In general, it is not good practice to use an asterisk(*) in the SELECT statement if you don't really need all columns. It will automatically query everything, which increases traffic between the database server and the application, which can slow down the retrieval of results.
+In general, it is not good practice to use an asterisk(*) in the SELECT statement if you don't need all columns. It will automatically query everything, which increases traffic between the database server and the application, which can slow down the retrieval of results.
 
 <br />
 
@@ -71,7 +71,7 @@ SELECT DISTINCT(column_name) FROM table_name
 ```
 
 <br />
-What if we have two of the same distinct instance within a column? We don't know if the returned data is the person with the name "David" as a duplicate entry, or two different people with the same first name... We only that David is one of the distinct 'first_name' values within that column.
+What if we have two of the same distinct instances within a column? We don't know if the returned data is the person with the name "David" as a duplicate entry, or two different people with the same first name... We only that David is one of the distinct 'first_name' values within that column.
 
 ### Other useful cases for DISTINCT.
 
@@ -92,7 +92,7 @@ SELECT DISTINCT (rental_rate) FROM film
 ```
 
 <br />
-Let's say we have a visitor from Australia who't not familiar with our movie ratings system in the USA. We want to know... <br /> <br />
+Let's say we have a visitor from Australia who's not familiar with our movie ratings system in the USA. We want to know... <br /> <br />
 
 1. What types (or, distinct values) of ratings do we have in the database?
    "PG"
@@ -111,14 +111,14 @@ SELECT DISTINCT rating FROM film;
 
 # Count function
 
-By default the count function returns the number of input rows of a table.
+By default, the count function returns the number of input rows of a table.
 
 ```SQL
 SELECT COUNT(*) FROM table_name
 ```
 
 <br /><br />
-By including a argument, the returned query will then match that specific argument/condition.
+By including an argument, the returned query will then match that specific argument/condition.
 
 ```SQL
 SELECT COUNT(first_name) FROM table_name
@@ -153,7 +153,7 @@ AND choice = 'red'
 ```
 
 <br />
-How would we find the number of films with a rating or R or PG-13?
+How would we find the number of films with a rating of R or PG-13?
 <br/>
 <br/>
 
@@ -168,7 +168,7 @@ OR rating = 'PG-13'
 
 # Where statement
 
-One of the most fundamental statements alongside SELECT. With Where, we can specify conditions on columns for which rows to be returned. We decide what columns we want back, then the table, then WHERE to describe the conditions.
+One of the most fundamental statements alongside SELECT. With Where, we can specify conditions on columns for which rows are to be returned. We decide what columns we want back, then the table, then WHERE to describe the conditions.
 <br/>
 <br/>
 
@@ -343,7 +343,7 @@ date BETWEEN '2007-01-01' AND '2007-02-01'
 <span style="font-size: 18px">NOTE:</span>
 
 1. <span style="color: lightgreen">You need to format dates in the ISO 8601 standard format, which is YYYY-MM-DD.</span>
-2. <span style="color: lightgreen">When using BETWEEN operator with dates that also include timestamp information, pay careful attention to using BETWEEN versus <=, >= comparison operators, due to the fact that a datetime start with <span style="color: red">0:00.</span>
+2. <span style="color: lightgreen">When using BETWEEN operator with dates that also include timestamp information, pay careful attention to using BETWEEN versus <=, >= comparison operators, because a datetime start with <span style="color: red">0:00.</span>
 
 <br />
 How many payments are there above, or below 9 dollars? <br />Answer: 14157
@@ -366,7 +366,7 @@ Remember Note 2. above? Here we have an example of this. We're only returning pa
 
 # ~ IN ~
 
-- You may want to check for multiple possible value options, for example, ir a user's name shows up IN/NOT IN list of options.
+- You may want to check for multiple possible value options, for example, if a user's name shows up IN/NOT IN list of options.
 - We can use the IN/NOT IN operator to create a condition that checks to see if a value is included in a list of multiple options.
 
 Syntax:
@@ -447,14 +447,14 @@ NOTE:
 - <span style="color: lightGreen">You can combine LIKE and ILIKE operators for far greater detail
 - <span style="color: lightGreen"><span style="background: darkred">REGEX expressions are fully supported in SQL!</span>
 
-Get all customer that are some letter, followed by 'her', then any combination of letter.
+Get all customer names that are some letter, followed by 'her', then any combination of letters.
 
 ```sql
 SELECT first_name FROM customer
 WHERE first_name LIKE '_her%'
 ```
 
-How many peoples name starts with just the letter J?
+How many people's name starts with just the letter J?
 
 ```sql
 SELECT count(*) FROM customer
@@ -472,18 +472,18 @@ WHERE first_name LIKE 'J%'
       SELECT COUNT(*) FROM payment
       WHERE amount > 5.00
      ```
-2. How many actors have a first name that starts with a letter P?
+2. How many actors have a first name that starts with the letter P?
    - ```sql
       SELECT COUNT(actor) FROM actor
       WHERE first_name LIKE 'P%'
      ```
 3. How many unique districts are our customers from?
    - ```sql
-     SELECT DISTINCT (COUNT(district)) from address
+     SELECT DISTINCT (COUNT(district)) FROM address
      ```
 4. Retrieve the list of names for those distinct districts from the previous question.
    - ```sql
-     SELECT DISTINCT (district) from address
+     SELECT DISTINCT (district) FROM address
      ```
 5. How many films have a rating of R and a replacement cost between $5 and $15? Answer: 52.
    - ```sql
@@ -511,8 +511,8 @@ Further info: https://www.postgresql.org/files/documentation/pdf/16/postgresql-1
 
 SQL provides a variety of aggregate functions but some of the most common are:
 
-- AVG() and ROUND() - returns average value (returns 2.41512346112347898).
-  - Use ROUND() function to specify precision of decimals.
+- AVG() and ROUND() - returns the average value (returns 2.41512346112347898).
+  - Use ROUND() function to specify the precision of decimals.
   - (1st parameter = to be rounded, 2nd parameter = # of decimal places to round)
 - COUNT() - returns number of values
 - MAX() - returns maximum value
@@ -617,7 +617,7 @@ WHERE division IN ('marketing', 'transport')
 GROUP BY company, division
 ```
 
-WHERE statements should not refer to the aggregation result (SUM(sales)), later on we will learn to use HAVING to filter on those results.
+WHERE statements should not refer to the aggregation result (SUM(sales)), later on, we will learn to use HAVING to filter those results.
 
 Here's an example we've been working with:
 
