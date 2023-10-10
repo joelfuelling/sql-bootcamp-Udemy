@@ -496,3 +496,150 @@ WHERE first_name LIKE 'J%'
      SELECT COUNT(*) FROM film
      WHERE title LIKE '%Truman%'
      ```
+
+<br />
+<br />
+<br />
+
+# GROUP BY
+
+Allows us to aggregate data and apply functions to better understand how data is distributed per category.
+
+## Aggregate Functions
+
+Further info: https://www.postgresql.org/files/documentation/pdf/16/postgresql-16-US.pdf
+
+SQL provides a variety of aggregate functions but some of the most common are:
+
+- AVG() and ROUND() - returns average value (returns 2.41512346112347898).
+  - Use ROUND() function to specify precision of decimals.
+  - (1st parameter = to be rounded, 2nd parameter = # of decimal places to round)
+- COUNT() - returns number of values
+- MAX() - returns maximum value
+- MIN() - returns minimum value
+- SUM() - returns the sum of all values.
+
+NOTE: <span style="color: lightGreen">Aggregate function calls happen only in the SELECT clause of the HAVING clause.</span>
+
+<br />
+
+### MIN and MAX
+
+We know now we'll have to spend at least 9.99 to replace a film, OR at most 29.99
+
+```SQL
+SELECT MIN(replacement_cost) A FROM film
+```
+
+```SQL
+SELECT MAX(replacement_cost) A FROM film
+```
+
+<br />
+
+This is messy and repetitive. Instead, <span style="color: orange">we can separate the aggregate function calls with a comma.</span> They're both returning a singular value so this sort of query makes sense.
+
+```SQL
+SELECT MAX(replacement_cost),MIN(replacement_cost) FROM film
+```
+
+<br />
+
+### AVG and ROUND
+
+```SQL
+SELECT AVG(replacement_cost) FROM film
+```
+
+We get waaaaaaay too many decimal points here. So, let's use the ROUND function, which takes in the 1st parameter as the value to be rounded, and the second as the number of decimal points to round to.
+
+```SQL
+SELECT ROUND(AVG(replacement_cost),2) FROM film
+```
+
+<br />
+
+### SUM
+
+```SQL
+SELECT SUM(replacement_cost) FROM film
+```
+
+<br />
+<br />
+
+## GROUP BY - Part One - Theory
+
+Allows us to aggregate columns per some category.
+
+Things to consider:
+
+1. We need to choose a <span style="color: orange">categorical</span> column to GROUP BY
+2. Categorical columns are non-continuous
+3. Keep in mind, they can still be numerical, such as cabin class categories on a ship( e.g. Class 1, Class 2, Class 3)
+
+| Category | Data Value |
+| -------- | ---------- |
+| A        | 10         |
+| A        | 5          |
+| B        | 2          |
+| B        | 4          |
+| C        | 12         |
+| C        | 6          |
+
+Considering the table above, we have category A, then B, then C. Remember, an aggregate function takes a group of numbers and returns a single value. So, the 10 & 5, 2 & 4, and 12 & 6 for each respective category would SUM to 15, 6, and 18, respectively.
+
+Or AVG, or COUNT, etc...
+
+<br />
+
+Group by Syntax:
+
+```SQL
+SELECT category_col, AGG(data_col)
+FROM table
+GROUP BY category_col
+```
+
+NOTE:
+
+- <span style="color: lightGreen">The GROUP BY clause must appear right after a FROM or WHERE statement</span>
+- <span style="color: lightGreen">In the SELECT statement, columns must either have an aggregate function or be the GROUP by call.</span>
+
+<br />
+
+For Example:
+
+```SQL
+SELECT company, division, SUM(sales)
+FROM finance_table
+WHERE division IN ('marketing', 'transport')
+GROUP BY company, division
+```
+
+WHERE statements should not refer to the aggregation result (SUM(sales)), later on we will learn to use HAVING to filter on those results.
+
+Here's an example we've been working with:
+
+```sql
+SELECT amount, customer_id, SUM(amount)
+FROM payment
+WHERE amount != 0
+GROUP BY customer_id,amount
+ORDER BY SUM(amount) DESC
+LIMIT 5
+```
+
+This is to say: "Find me the top 5 customers with the highest payments" - Sorted from highest to lowest, omitting anyone with 0 payment.
+
+## GROUP BY - Part Two - Implementation
+
+<br />
+<br />
+
+## Challenge Tasks for GROUP BY
+
+<br />
+<br />
+
+## Challenge tasks for HAVING
