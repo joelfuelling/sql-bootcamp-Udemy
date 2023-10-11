@@ -685,19 +685,14 @@ ORDER BY SUM(amount)
 
 # <span style="color: purple; font-style: italic">GROUP BY CHALLENGE! 🏘️</span>
 
-<br />
-<br />
-
-## Challenge tasks for HAVING
-
 We have two staff members, with Staff IDs 1 and 2. We want to give a bonus to the staff member that handled the most payments. (most in terms of the number of payments processed, not the dollar amount).
 
 How many payments did each staff member handle and who gets the bonus?
 
-```
-SELECT staff_id,COUNT(payment_id) FROM payment
-GROUP BY staff_id
-ORDER BY staff_id DESC
+```sql
+SELECT rating, ROUND(AVG(replacement_cost), 2) FROM film
+GROUP BY rating
+ORDER BY AVG(replacement_cost)
 ```
 
 <details> 
@@ -706,3 +701,174 @@ ORDER BY staff_id DESC
 ![Alt text](image-2.png)
 
 </details>
+
+SELECT rating, AVG(replacement_cost) FROM film
+GROUP BY rating
+ORDER BY AVG(replacement_cost)
+
+<br />
+<br />
+
+What is the average replacement cost per MPAA rating?
+
+- You may need to expand the AVG column to view correct results.
+
+```sql
+SELECT rating, AVG(replacement_cost) FROM film
+GROUP BY rating
+ORDER BY AVG(replacement_cost)
+```
+
+<details> 
+<summary>Answer: </summary>
+
+![Alt text](image-3.png)
+
+</details>
+
+<br />
+<br />
+
+Running promotion to reward our top 5 customers with coupons. What are the customer IDs of the top 5 customers by total spend?
+
+```sql
+SELECT customer_id, SUM(amount) from payment
+GROUP BY customer_id
+ORDER BY SUM(amount) DESC
+limit 5
+```
+
+<details> 
+<summary>Answer: </summary>
+
+![Alt text](image-4.png)
+
+</details>
+
+<br />
+<br />
+
+# Having
+
+Having clause allows us to filter after an aggregation has already taken place. From before..
+
+```SQL
+SELECT company, SUM(sales)
+FROM finance_table
+WHERE company != 'Google'
+GROUP BY company
+```
+
+We've already seen we can filter before executing the GROUP BY, but what if we want to filter based on SUM(sales)?
+
+<br />
+
+NOTE: <span style="color: lightGreen">We can not use WHERE to filter based off of aggregate results, because those happen after a WHERE is executed.</span>
+
+<br />
+
+<span style="color: green">HAVING</span> allows us to use the aggregate result as a filter along with a GROUP BY.
+
+This is to say - "Go ahead and do a filter with the where for all company's other than Google, then group by those companies, then only return those having more than 1000 in sales.
+
+```sql
+SELECT customer_id, SUM(amount)
+FROM payment
+WHERE customer_id NOT IN (184,87,477)
+GROUP BY customer_id HAVING SUM(amount) > 100
+```
+
+<details> 
+<summary>Solution: </summary>
+
+![Alt text](image-5.png)
+
+</details>
+
+<br />
+<br />
+
+Another example of using HAVING to filter the aggregate result... (Stores with more than 300 customers)
+
+```sql
+SELECT store_id,COUNT(customer_id)FROM customer
+GROUP BY store_id
+HAVING COUNT(customer_id) > 300
+```
+
+<br />
+<br />
+
+# <span style="color: purple; font-style: italic">Challenge tasks for HAVING 🎒⛏️</span>
+
+We are launching a platinum service for our most loyal customers. We will assign platinum status to customers that have had 40 or more transaction payments.
+
+What customer_ids are eligible for platinum status?
+
+```sql
+SELECT customer_id, COUNT(payment_id)
+FROM payment
+GROUP BY customer_id
+HAVING COUNT(payment_id) >= 40
+```
+
+<details> 
+<summary>Solution: </summary>
+
+![Alt text](image-6.png)
+
+</details>
+
+<br />
+<br />
+
+What are the customer ids of customers who have spent more than $100 in payment transactions with our staff_id member 2?
+
+```sql
+SELECT customer_id, staff_id,SUM(amount) FROM payment
+WHERE staff_id = 2
+GROUP BY customer_id, staff_id
+HAVING SUM(amount) > 100
+ORDER BY SUM(amount)
+```
+
+<details> 
+<summary>Solution: </summary>
+
+![Alt text](image-7.png)
+
+</details>
+
+<br />
+<br />
+<br />
+<br />
+
+# ASSESSMENT TEST:
+
+1. Return the customer IDs of customers who have spent at least $110 with the staff member who has an ID of 2 (Answer: 187 and 148).
+
+```sql
+SELECT customer_id, SUM(amount) FROM payment
+WHERE staff_id = 2
+GROUP BY customer_id
+HAVING SUM(amount) > 110
+ORDER BY SUM(amount)
+```
+
+2. How many films begin with the letter J? (Answer: 20)
+
+```sql
+SELECT COUNT(*) FROM film
+WHERE title LIKE 'J%'
+```
+
+3. What customer has the highest customer ID number who's name starts with an 'E' and has an address ID lower than 500 (Answer: Eddie Tomlin)
+
+```SQL
+SELECT * FROM customer
+WHERE first_name LIKE 'E%'
+AND address_id < 500
+ORDER BY customer_id DESC
+
+```
