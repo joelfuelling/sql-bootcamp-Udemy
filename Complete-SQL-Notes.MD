@@ -632,14 +632,77 @@ LIMIT 5
 
 This is to say: "Find me the top 5 customers with the highest payments" - Sorted from highest to lowest, omitting anyone with 0 payment.
 
+<br />
+<br />
+
 ## GROUP BY - Part Two - Implementation
 
+Which customer has the highest payment?
+
+```SQL
+SELECT customer_id,SUM(amount) FROM payment
+GROUP BY customer_id
+ORDER BY SUM(amount) DESC
+```
+
+Which customer has the highest number of payments?
+
+```sql
+SELECT customer_id,COUNT(amount) FROM payment
+GROUP BY customer_id,
+ORDER BY COUNT(amount) DESC
+```
+
+<br />
+
+### Using GROUP BY on multiple columns.
+
+We can find the highest transactions made between which customer and which employee.
+
+```sql
+SELECT customer_id,staff_id,SUM(amount) FROM payment
+GROUP BY staff_id, customer_id
+ORDER BY customer_id
+```
+
 <br />
 <br />
 
-## Challenge Tasks for GROUP BY
+### Using the DATE() function with GROUP BY
+
+Simply call the DATE() function to convert the timestamped format to the standard YYYY-MM-DD format.
+
+Below, we're able to find the days on which the lowest (ASC) amount transactions took place.
+
+```SQL
+SELECT DATE(payment_date), SUM(amount) FROM payment
+GROUP BY DATE(payment_date)
+ORDER BY SUM(amount)
+```
+
+<br />
+<br />
+
+# <span style="color: purple; font-style: italic">GROUP BY CHALLENGE! 🏘️</span>
 
 <br />
 <br />
 
 ## Challenge tasks for HAVING
+
+We have two staff members, with Staff IDs 1 and 2. We want to give a bonus to the staff member that handled the most payments. (most in terms of the number of payments processed, not the dollar amount).
+
+How many payments did each staff member handle and who gets the bonus?
+
+```
+SELECT staff_id,COUNT(payment_id) FROM payment
+GROUP BY staff_id
+ORDER BY staff_id DESC
+```
+
+<details> 
+<summary>Answer: </summary>
+
+![Alt text](image-2.png)
+
+</details>
