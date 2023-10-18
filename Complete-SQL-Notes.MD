@@ -1,3 +1,4 @@
+<!--  cSpell:enable  -->
 <h1>Complete SQL Boot Camp: Go from Zero0️⃣ to Hero🦸‍♂️!</h1>
 
 Databases are systems that allow users to store and organize data, GREAT with large sets of data. They contain a wide variety of users with various technical skill-sets (sales, ops, engineer, etc.)
@@ -751,7 +752,6 @@ limit 5
 <br />
 <br />
 
-
 # Having
 
 Having clause allows us to filter after an aggregation has already taken place. From before..
@@ -886,6 +886,7 @@ AND address_id < 500
 ORDER BY customer_id DESC
 LIMIT 3;
 ```
+
 <br />
 <br />
 <br />
@@ -898,11 +899,11 @@ JOINS allow us to combine information from multiple tables.
 
 First, we'll learn how to create an alias with the AS clause. Then, we'll move on to the 4 joins listed below.
 
-  - INNER JOINS
-  - OUTER JOINS
-  - FULL JOINS
-  - UNIONS
-<br />
+- INNER JOINS
+- OUTER JOINS
+- FULL JOINS
+- UNIONS
+  <br />
 
 ### AS Statement
 
@@ -919,6 +920,7 @@ SELECT amount AS rental_price FROM payment
 -- Or ...
 SELECT SUM(amount) AS net_revenue FROM payment
 ```
+
 <br />
 <br />
 
@@ -928,20 +930,21 @@ SELECT SUM(amount) AS net_revenue FROM payment
 SELECT COUNT(amount) FROM payment
 ```
 
-We can use AS conveniently to rename selections into what they "actually" are. These names are fore the column headers only. 
-
+We can use AS conveniently to rename selections into what they "actually" are. These names are fore the column headers only.
 
 Here, it's hard to tell specifically what we want, other than customer_id information and a sum of the amount.
+
 ```sql
-SELECT customer_id, SUM(amount) FROM payment 
+SELECT customer_id, SUM(amount) FROM payment
 GROUP BY customer_id
 ```
+
 <br />
 We can tidy this up by renaming the selection into.
 
 ```sql
 SELECT customer_id AS cust_id, SUM(amount) AS total_spent
-FROM payment 
+FROM payment
 GROUP BY customer_id
 ```
 
@@ -950,11 +953,12 @@ GROUP BY customer_id
 
 ```sql
 -- ! BAD SQL ! --
-SELECT customer_id, SUM(amount) AS total_spent 
+SELECT customer_id, SUM(amount) AS total_spent
 FROM payment
 GROUP BY customer_id
 HAVING total_spent > 100
 ```
+
  <br />
 
 ### Now that we know how to use AS, let's to back to JOINS...
@@ -963,17 +967,16 @@ HAVING total_spent > 100
 
 ## INNER JOINS
 
-
 <span style="color: orange">INNER JOINS</span> will result with the <span style="color: orange">set of records that match in both tables</span>.
 
 Let's start by assuming our company is holding a conference for people in the movie rental industry. We'll have people register online (REGISTRATIONS) beforehand and then login the day of the conference (LOGINS). We're going to assume there are no duplicate first names.
 
 We want to know who has registered for the event, and also who has logged in.
 
-
 <br />
 
 ##### We're saying - "Grab table A and then grab table B. Because it's an inner join, only grab the rows that happen to be in both tables A and B. Join them ON TableA columns that match TableB columns.
+
 #### Syntax:
 
 ```sql
@@ -988,6 +991,7 @@ ON TableA.col_match = TableB.col_match
 <br />
 
 ### Working example:
+
 ![Alt text](image-10.png)
 
 <br />
@@ -996,7 +1000,7 @@ ON TableA.col_match = TableB.col_match
 
 <br />
 
-Now we have A LOT of results! But, we have duplicate name columns (because we selected *) with duplicate information and we know that's not how we like to do things.
+Now we have A LOT of results! But, we have duplicate name columns (because we selected \*) with duplicate information and we know that's not how we like to do things.
 
 To clean this up, we can declare specific columns that we want. Below (syntax example), We're saying select 3 things: Registration ID, Login names, and Login ID from the Registrations table. Then, join Logins where the names are equal to each other... However, because 'name' existed in both tables, and as we saw before, it will simply produce both columns with the same 'name' header. <span style="color: orange"> Here, we're only returning the Logins.name column (we could also use registrations.name, it doesn't matter since they're the same)</span>
 
@@ -1006,6 +1010,7 @@ To clean this up, we can declare specific columns that we want. Below (syntax ex
 <br />
 
 #### <span style="color: orange"> REMEMBER! </span>
+
 - Table order won't matter in an INNER JOIN
 - Also, if you see JOIN without the INNER, PostgreSQl will treat it as an INNER JOIN
 
@@ -1014,47 +1019,51 @@ To clean this up, we can declare specific columns that we want. Below (syntax ex
 
 #### This request pulls back all fields using the the JOIN with the same customer_id.
 
-
 ```sql
 SELECT * FROM payment
 JOIN customer
 ON payment.customer_id = customer.customer_id
 ```
+
 <br />
 
 Let's widdle it down a bit and only select certain columns.
-  - If we're referring to a column name that only exists in one table we don't have to do anything specific
-  - If both tables contain the same column name (customer_id), then we can specify which table we want to use it from.
-    - Since we're already pulling FROM the payment table, it would be best practice to use that one...
 
-  ```sql
-  SELECT payment_id, payment.customer_id, first_name
-  FROM payment
-  JOIN customer
-  ON payment.customer_id = customer.customer_id
-  ```
+- If we're referring to a column name that only exists in one table we don't have to do anything specific
+- If both tables contain the same column name (customer_id), then we can specify which table we want to use it from.
+  - Since we're already pulling FROM the payment table, it would be best practice to use that one...
 
-The above only JOINS customers FROM payment who have an existing payment (FROM payment), and that are both on the customer and payment table with matching ids (JOIN customer)
+```sql
+SELECT payment_id, payment.customer_id, first_name
+FROM payment
+JOIN customer
+ON payment.customer_id = customer.customer_id
+```
+
+The above only JOINS customers FROM payment who have an existing payment (FROM payment), and that are both on the customer and payment table with matching ids.
 
 <br />
 <br />
 <br />
 
-# FULL (OUTER) JOINS 
+# FULL (OUTER) JOINS
+
+Think of a venn diagram, but completely FULL!
 
 - There are a few different types of OUTER (OUTER) JOINS
-- They will allow us to specify how to deal with values only present in one of hte tables being joined.
+- They will allow us to specify how to deal with values only present in one of the tables being joined.
 - There are the more complex JOINs, take your time!
 
 #### Below, we'll explain...
-  - FULL JOIN (Clarifying WHERE null)
-  - LEFT JOIN (Clarifying WHERE null)
-  - RIGHT JOIN (Clarifying WHERE null)
-  
+
+- FULL JOIN (Clarifying WHERE null)
+- LEFT JOIN (Clarifying WHERE null)
+- RIGHT JOIN (Clarifying WHERE null)
+
 <br />
 <br />
 
-First, let's describe the FULL  JOIN.
+First, let's describe the FULL (OUTER) JOIN.
 
 syntax: Select all the columns from table A, and join all of Table B.
 
@@ -1071,16 +1080,17 @@ SELECT * FROM Registrations
 FULL JOIN Logins
 ON Registrations.name = Logins.name
 ```
+
 The returned table will contain the matches where the names exist in both columns, but since we asked to return all, what about the rows where the names don't match? It will place <span style="color: orange">'null'</span> instead of the values into those rows.
 
-|  reg_id  |  Name    |  log_id   |  name  |
-|------|----------|------------|------------|
-|  1   |  Andrew   |  2|  2023-01-05|
-|  2   |  Bob     |  4|  2023-01-06|
-|  3   |  Charlie   |  <span style="color: orange">null</span>|  <span style="color: orange">null</span>      |
-|  4   |  David    |  <span style="color: orange">null</span>      |  <span style="color: orange">null</span>|
-| <span style="color: orange">null</span> |<span style="color: orange">null</span>      | 1 |Xavier | 
-| <span style="color: orange">null</span> | <span style="color: orange">null</span> | 3 | Yolanda |
+| reg_id                                  | Name                                    | log_id                                  | name                                    |
+| --------------------------------------- | --------------------------------------- | --------------------------------------- | --------------------------------------- |
+| 1                                       | Andrew                                  | 2                                       | 2023-01-05                              |
+| 2                                       | Bob                                     | 4                                       | 2023-01-06                              |
+| 3                                       | Charlie                                 | <span style="color: orange">null</span> | <span style="color: orange">null</span> |
+| 4                                       | David                                   | <span style="color: orange">null</span> | <span style="color: orange">null</span> |
+| <span style="color: orange">null</span> | <span style="color: orange">null</span> | 1                                       | Xavier                                  |
+| <span style="color: orange">null</span> | <span style="color: orange">null</span> | 3                                       | Yolanda                                 |
 
 <br />
 <br />
@@ -1090,6 +1100,7 @@ The returned table will contain the matches where the names exist in both column
 Meaning, we're looking for the actual values where one of the rows is null. This grabs the rows that are completely unique to either Table A, or Table B.
 
 Syntax:
+
 ```sql
 SELECT * FROM TableA
 FULL OUTER JOIN TableB
@@ -1098,32 +1109,29 @@ WHERE Table.id IS null OR Table.id IS null
 ```
 
 ```sql
-SELECT * FROM Registrations 
+SELECT * FROM Registrations
 FULL OUTER JOIN Logins
 ON Registrations.reg_id = Logins.log_id
-WHERE Registrations.reg_id IS null 
+WHERE Registrations.reg_id IS null
 OR Logins.log_id IS null
 ```
 
 <br />
 <br />
 
-Using the table from above, we would now see all unique values...
+Using the table from above, we would now see all results that are unique to the either the Registration table, or the Login table.
 
-|  reg_id  |  Name    |  log_id   |  name  |
-|------|----------|------------|------------|
-|  3   |  Charlie   |  null|  null      |
-|  4   |  David    |  null      |  null|
-| null |null      | 1 |Xavier | 
-| null | null | 3 | Yolanda |
-
+| reg_id | Name    | log_id | name    |
+| ------ | ------- | ------ | ------- |
+| 3      | Charlie | null   | null    |
+| 4      | David   | null   | null    |
+| null   | null    | 1      | Xavier  |
+| null   | null    | 3      | Yolanda |
 
 <br />
 <br />
 
 Let's do an example in PgAdmin! We want to ensure that we don't have any customer information that's not tied to a payment, or any payment information that's not tied to a customer. Luckily, there are none.
-
-
 
 ```sql
 SELECT * FROM customer
@@ -1152,16 +1160,16 @@ SELECT COUNT(DISTINCT customer_id) FROM payment.
 <br />
 <br />
 
-
 NOTE: <span style="color: lightgreen">With both LEFT and RIGHT JOINS, the order we enter the query now matters, since we have to specify what the left table will be.</span>
 
-# LEFT JOIN
+# LEFT (OUTER) JOIN
 
 A LEFT OUTER JOIN results in the set of records that are in the left table, if there is no match with the right table, the results are null.
 
 Think of a venn diagram with the left circle and center filled up with the right circle being empty.
 
 Syntax
+
 ```sql
 SELECT * FROM TableA
 LEFT OUTER JOIN TableB
@@ -1173,23 +1181,25 @@ ON TableA.col_match = TableB.col_match
 <span style="color: orange">If something is only found in tableB, it will not be returned in the query.</span>
 
 Let's explore this with our login example.
-  - Grab everything from the Registrations table
-  - If there happens to be a match with the logins table, then go ahead and return it.
-  - If there is no match, we're still going to grab the information from left hand table (Logins), and place 'null' in as the value.
+
+- Grab everything from the Registrations table
+- If there happens to be a match with the logins table, then go ahead and return it.
+- If there is no match, we're still going to grab the information from left hand table (Logins), and place 'null' in as the value.
 
 ```sql
 SELECT * FROM Registrations
 LEFT OUTER JOIN Logins
 ON Registrations.name = Logins.name
 ```
+
 <br />
 
-|  reg_id  |  Name    |  log_id   |  name  |
-|------|----------|------------|------------|
-|  1   |  Andrew   |  2|  Andrew      |
-|  2   |  Bob   |  4      |  Bob|
-| 3 |Charlie      | null |null | 
-| 4 | David | null | null |
+| reg_id | Name    | log_id | name   |
+| ------ | ------- | ------ | ------ |
+| 1      | Andrew  | 2      | Andrew |
+| 2      | Bob     | 4      | Bob    |
+| 3      | Charlie | null   | null   |
+| 4      | David   | null   | null   |
 
 <br />
 
@@ -1201,10 +1211,11 @@ LEFT OUTER JOIN Logins
 ON Registrations.name = Logins.name
 WHERE Logins.id IS null
 ```
+
 <br />
 <br />
 
-PgAdmin examples! Let's look at the film and inventory tables. We're returning the rows that are either just in the film table, or in both the film and inventory table. 
+PgAdmin examples! Let's look at the film and inventory tables. We're returning the rows that are either just in the film table, or in both the film and inventory table.
 
 Adding the WHERE, it filters it to films that are not in inventory, or in any store! But, we do have information available on them.
 
@@ -1214,3 +1225,5 @@ LEFT JOIN inventory ON
 inventory.film_id = film.film_id
 WHERE inventory.film_id IS null
 ```
+
+<!-- cSpell:disable  -->
