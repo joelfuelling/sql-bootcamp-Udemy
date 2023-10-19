@@ -1048,7 +1048,9 @@ The above only JOINS customers FROM payment who have an existing payment (FROM p
 
 # FULL (OUTER) JOINS
 
-Think of a venn diagram, but completely FULL!
+![Alt text](<Screenshot 2023-10-19 at 2.04.08 PM.png>)
+
+
 
 - There are a few different types of OUTER (OUTER) JOINS
 - They will allow us to specify how to deal with values only present in one of the tables being joined.
@@ -1099,7 +1101,7 @@ The returned table will contain the matches where the names exist in both column
 
 Meaning, we're looking for the actual values where one of the rows is null. This grabs the rows that are completely unique to either Table A, or Table B.
 
-Syntax:
+Syntax: (see diagram above for example venn diagram of an [Exclusive] Full Join)
 
 ```sql
 SELECT * FROM TableA
@@ -1160,9 +1162,15 @@ SELECT COUNT(DISTINCT customer_id) FROM payment.
 <br />
 <br />
 
-NOTE: <span style="color: lightgreen">With both LEFT and RIGHT JOINS, the order we enter the query now matters, since we have to specify what the left table will be.</span>
+
 
 # LEFT (OUTER) JOIN
+
+NOTE: 
+- <span style="color: lightgreen">With both LEFT and RIGHT JOINS, the order we enter the query now matters, since we have to specify what the left table will be.</span>
+- <span style="color: lightgreen">LEFT OUTER JOIN, and RIGHT OUTER JOIN can both be shorted to simply LEFT JOIN and RIGHT JOIN </span>
+
+<br />
 
 A LEFT OUTER JOIN results in the set of records that are in the left table, if there is no match with the right table, the results are null.
 
@@ -1211,6 +1219,12 @@ LEFT OUTER JOIN Logins
 ON Registrations.name = Logins.name
 WHERE Logins.id IS null
 ```
+<details> 
+<summary>Venn Diagram Visualization: </summary>
+
+![Alt text](image-15.png)
+
+</details>
 
 <br />
 <br />
@@ -1225,5 +1239,3 @@ LEFT JOIN inventory ON
 inventory.film_id = film.film_id
 WHERE inventory.film_id IS null
 ```
-
-<!-- cSpell:disable  -->
