@@ -1602,10 +1602,250 @@ This is a very basic approach to creating emails. Let's assume we dont want the 
 <br />
 <br />
 
-# Subquery
+# SubQuery
 
 Sub queries are queries nested inside another query. They allow you to perform complex operations by combining multiple tables and performing calculations on them.
 
 Another way to say it is; A sub query is a query that is nested inside another query and returns one row for each result produced by the outer query.
 
-## selfjoin
+<br />
+
+We know how to grab all the info from a table...
+```sql
+SELECT student_grade FROM test_scores
+```
+And how to get the AVG() of some info.
+```sql
+SELECT AVG(student_scores) FROM test_scores
+```
+ <br />
+
+How can we get a list of students who scored BETTER than the average grade? 
+- By placing a 2nd SELECT statement as the "less than" returned condition in the WHERE statement below, wrapped inside parenthesis.
+
+```sql
+SELECT student,grade 
+FROM test_scores
+WHERE grade > (SELECT AVG(grade) FROM test_scores)
+```
+
+Above, the <span style="color: lightGreen"> subquery ((SELECT AVG(grade) FROM test_scores)) is performed first</span> since it is inside the parenthesis. 
+
+<br />
+
+REMEMBER: <span style="color: orange"> You can also use the IN operator in conjunction with a subquery to check against multiple results returned.
+
+<br />
+<br />
+
+A subquery can operate on a separate table:
+
+ Below, the separate select narrows down the overall return to only contain students that are in both the test_scores and honor_roll_table.
+
+```sql
+SELECT student, grade FROM test_scores
+WHERE student IN (SELECT student FROM honor_roll_table)
+```
+
+<br />
+<br />
+
+### EXISTS()
+
+The EXISTS operator is used to test for the existence of any rows returned by a subquery - Think of it as a boolean
+
+Syntax:
+
+```sql
+SELECT column_name FROM table_name 
+WHERE EXISTS 
+(SELECT column_name FROM table_name WHERE ~condition goes here~)
+```
+
+<br />
+<br />
+
+
+OK - Back to subquerys. To set one up first, create the subquery. Then, wrap it in parenthesis and place it at the end of your query with a line above it.
+
+```sql
+-- Leave a line here to start
+(SELECT AVG(rental_rate) FROM film)
+```
+
+Then, add in the large (top-level) query to get your columns and table...
+  - This first gets the average rental_rate from film, then returns the title and rental rate of films where the rental rate is higher than the average.
+```sql
+SELECT title, rental_rate 
+FROM film
+WHERE rental_rate >
+(SELECT AVG(rental_rate) FROM film)
+```
+
+<br />
+<br />
+
+<span style="font-Size: 36px">NOTE: <span style="color: lightGreen"> If your subquery returns multiple values, you'll have to use the IN operator!</span>
+
+<br />
+
+
+Let's see this in combination with a join...
+
+Situation: We want to grab the film titles that have been returned BETWEEN a certain set of dates, May 29th 2005 - May 30th 2005. Below we have the films from the dates we need in bulk format with no titles or inventory information.
+
+```sql
+SELECT * FROM rental
+WHERE return_date BETWEEN '2005-05-29' AND '2005-05-30'
+```
+
+Next, we want to join the inventory table on matching inventory ids to make sure they are in inventory.
+
+```sql
+SELECT inventory.film_id FROM rental
+INNER JOIN inventory 
+ON inventory.inventory_id = rental.inventory_id
+WHERE return_date BETWEEN '2005-05-29' AND '2005-05-30'
+```
+
+Great! Now what would be the easiest way to just get the title information of these films added? (What section are we in?!) That's right, wrap the query below in parenthesis and make it the subquery with the line above it, then create the top-level query to get the film id titles included IN the subquery.
+
+Remember, we want the title of the film ids where the di is in the subquery...
+```sql
+SELECT title, film_id FROM film
+WHERE film_id IN
+(SELECT inventory.film_id FROM rental
+INNER JOIN inventory 
+ON inventory.inventory_id = rental.inventory_id
+WHERE return_date BETWEEN '2005-05-29' AND '2005-05-30')
+```
+
+using EXISTS(), we can find the customers who have at least 1 payment that's greater than 11. We want both the first and last names... What tables need accessed to get all required information?
+  - You could also use NOT before EXISTS() to return all the customers who have not met the subquery condition.
+
+```sql
+SELECT first_name, last_name FROM customer AS c
+WHERE EXISTS(
+SELECT * FROM payment AS p
+WHERE c.customer_id = p.customer_id
+AND amount > 11)
+```
+<details> 
+<summary>Returns: </summary>
+
+![Results](<Screenshot 2023-10-20 at 4.39.50 PM.png>)
+
+</details>
+<br />
+<br />
+
+
+## CHALLENGE!
+
+Try to do the same, but only with customers from California.
+
+```sql
+SELECT first_name, last_name FROM customer AS c
+WHERE EXISTS(
+	SELECT * 
+	FROM payment AS p
+	WHERE c.customer_id = p.customer_id
+	AND amount > 11 
+	AND EXISTS(
+		SELECT * 
+		FROM address AS ad
+		JOIN address
+		ON c.address_id = ad.address_id 
+		WHERE address.district LIKE 'California')
+)
+```
+
+<br />
+<br />
+
+
+
+
+
+How can we double check this? We did a quick manual check of the # of customers total from California and there are 9.
+<br />
+<br />
+
+# self-join
+
+A self-join in SQL is a join operation where a table is joined with itself. This is typically done by creating two or more aliases for the same table and specifying how the rows in the same table relate to each other. Self-joins are useful in situations where you need to compare and retrieve data from the same table based on some relationship between rows within that table. Here's the syntax for a self-join:
+```sql
+SELECT t1.column1, t2.column2
+FROM table_name AS t1
+INNER JOIN table_name AS t2 ON t1.related_column = t2.related_column;
+```
+
+<br />
+
+There is no special keyword for a self join, its simply standard JOIN syntax with the same table in both parts. However, because you're using the same table you <span style="color: orange"> you must use an alias to differentiate between the original and "copy"</span> (not an actual copy, it's just pulled twice)
+
+![Alt text](image-1.png)
+
+<br />
+<br />
+
+
+Let's explore a more realistic situation of when you would us a self-join!
+
+
+
+You have a company and some employees, and employees have to send reports to other employees (below). We can see that Andrew sends a report to report_id 3, which is Charlie (emp_id = 3). Following this, you can see who see who sends reports to who.
+
+
+
+![Alt text](image-3.png)
+
+<br />
+
+Let's show the results of the employee name, and their reports recipient name:
+
+```sql
+SELECT emp.name, report.name 
+FROM employees as emp
+JOIN employees as report ON
+emp.emp_id = report.report_id;
+```
+<details> 
+<summary>Returns (➡): </summary>
+
+
+![Alt text](image-4.png)
+
+</details>
+
+<br />
+<br />
+
+#### Into PgAdmin we go for some examples!
+
+Find all the PAIRS of films that have the same length (as the initial one at the top of each category, ie each different length)
+
+To start...
+```sql
+SELECT * FROM film
+WHERE length = 117
+```
+<details>
+  <summary>Returns:</summary>
+
+  ![Alt text](image-5.png)
+
+</details>
+
+<BR />
+
+Now, using aliases we want to pair each with the movie where the ON identifies film ids that are different from the first, and where both are the same length, all from the same table.
+
+```sql
+SELECT f1.title, f2.title, f1.length 
+FROM film AS f1
+INNER JOIN film AS f2 
+ON f1.film_id != f2.film_id
+AND f1.length = f2.length
+```
+
