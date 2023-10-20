@@ -1220,7 +1220,7 @@ ON Registrations.name = Logins.name
 WHERE Logins.id IS null
 ```
 <details> 
-<summary>Venn Diagram Visualization: </summary>
+<summary>Visualization: </summary>
 
 ![Alt text](image-15.png)
 
@@ -1239,3 +1239,373 @@ LEFT JOIN inventory ON
 inventory.film_id = film.film_id
 WHERE inventory.film_id IS null
 ```
+<details> 
+<summary>Solution: </summary>
+
+### <span style="color: red">Not in inventory!</span>
+![Alt text](image-16.png)
+
+</details>
+
+<br />
+<br />
+
+# RIGHT (OUTER) JOIN
+
+Essentially the exact same that as a LEFT JOIN, but the tables are switched up... Yes, it is sorta confusing the LEFT JOIN excludes the right table, and the RIGHT JOIN excludes the left table.
+
+You can apply a 'WHERE TableA.id IS null' to either join to exclude the results that match both columns (see below).
+
+
+<details> 
+<summary>Visualization: </summary>
+
+![Alt text](image-17.png)
+
+</details>
+
+<br />
+
+NOTE: <span style="color: lightGreen; textSize: 30px"> It is up to you how you have the tables organized "in your mind" when it comes to choosing a LEFT vs RIGHT join, since depending ont he table order you specify in the JOIN, you can perform duplicate JOINs with either method.
+
+<br />
+<br />
+
+# UNION
+
+A UNION is essentially stacking the return queries from SELECT statements.
+
+You can have multiple UNION calls in one query to combine results.
+
+Syntax:
+
+```sql
+SELECT * FROM Sales2021_Q1
+UNION
+SELECT * FROM Sales2021_Q2  
+UNION
+SELECT * FROM Sales2021_Q3
+ORDER BY name
+```
+
+*** UNION calls don't have a good use case example in the dvdRental examples we've been using so we'll revisit it later on... ***
+
+### JOIN Challenge tasks.
+
+1. California sales tax laws have changed and we need to alert our customers to this through email. 
+  - What are the emails for the customers who live in California?
+
+```sql
+SELECT email, district FROM address
+LEFT JOIN customer 
+ON address.address_id = customer.address_id
+WHERE district = 'California'
+```
+<details> 
+<summary>Solution: </summary>
+
+- Remember, you could use an INNER or RIGHT join here.
+- You could also switch the FROM and LEFT JOIN tables in this basic example and it would be the same result.
+
+<br />
+
+![Alt text](image-18.png)
+
+</details>
+
+<br />
+
+2. A customer walks in to the store adn there a huge fan of the actor "Nick Wahlberg" and wants to know what movies he is in.
+  - What movies are they in?
+
+We first need to identify what table is the "go between", "link", "bridge", (call it what you want) to get us the information in the prompt. 
+
+The film table doesn't have direct information for what actors there are, only the title... So, we at least know we'll need the film table 
+
+The actor table has the actor_id, <span style="color: orange">AND </span>the film_actor table has both the actor_id id. 
+
+So, we first join the the film_actor table on the actor on matching actor and film_actor id. This would return the list of matching actor/film ids, but not the titles.
+
+```sql
+SELECT * FROM actor
+INNER JOIN film_actor
+ON actor.actor_id = film_actor.actor_id
+```
+
+This is where we would perform a 2nd JOIN of the film table onto the existing table (film_actor joined on actor) where actor_id matches the film_id.
+
+```sql
+SELECT * FROM actor
+INNER JOIN film_actor ON actor.actor_id = film_actor.actor_id
+INNER JOIN film ON film.actor_id = film.film_id
+```
+
+This is a good start, but this doesn't specify "Nick Wahlberg" anywhere, or if 'actor_id = 2'. So, we add a WHERE with this condition to the end.
+
+```sql
+SELECT title, first_name, last_name FROM film_actor
+INNER JOIN actor ON film_actor.actor_id = actor.actor_id
+INNER JOIN film ON film_actor.film_id = film.film_id
+WHERE actor.actor_id = 2
+```
+
+<br /><br />
+
+# Advanced SQL topics
+
+These topics don't fit into the general flow of the previous section so we'll go over them one at a time here.
+
+We'll go over commands that report back date and time information, as well as topics that will be useful when creating our own tables and databases.
+
+## Timestamps and Extracts - Part One
+
+TIME - Contains only time
+
+DATE - Contains only date
+
+TIMESTAMP - Contains date and time
+
+TIMESTAMPTZ - Contains date, time, and timezone.
+
+<br />
+
+<span style="color: orange">REMEMBER: You can always remove historical information, but you can't add it!
+
+Functions and operations related to these specific data types:
+
+  - TIMEZONE
+  - NOW()
+  - TIMEOFDAY()
+  - CURRENT_TIME
+  - CURRENT_DATE
+
+  <br />
+  <br />
+
+SHOW ALL - Will return a large list of parameters for your SQL environment.
+
+Let's checkout timezone... (returns 'America/Chicago' format timezone)
+
+```sql
+SHOW TIMEZONE
+```
+Returns timezone stamp of the immediate moment.
+```sql
+SELECT NOW()
+```
+
+If you'd like a more user friendly format,<span style="color: orange"> a literal string interpretation</span> , use TIMEOFDAY()
+```SQL
+SELECT TIMEOFDAY()
+```
+Or, grab the current time
+```sql
+SELECT CURRENT_TIME
+```
+Or, the current date
+```sql
+SELECT CURRENT_DATE
+```
+<br />
+<br />
+
+## Timestamps and Extracts - Part Two
+
+Let's explore extracting information from a time based data type using:
+  - EXTRACT()
+  - AGE()
+  - TO_CHAR()
+
+<br />
+
+### EXTRACT()
+
+Allows you to "extract" or obtain a sub-component of a date value.
+  - YEAR
+  - MONTH
+  - DAY
+  - WEEK
+  - QUARTER
+
+Syntax:
+```sql
+EXTRACT(YEAR FROM date_col)
+```
+
+### AGE()
+
+Calculates and returns the current age given a timestamp
+Syntax:
+```sql
+AGE(date_col)
+```
+
+13 years 1 mon 5 days: 01:34:13.003425
+
+### TO_CHAR()
+
+General function to convert data types to text. Very useful for timestamp formatting.
+Syntax:
+```sql
+TO_CHAR(date_col, 'mm-dd-yyyy')
+```
+
+<br />
+<br />
+
+A working example  would be...
+```sql
+SELECT EXTRACT(YEAR FROM payment_date) AS pay_year FROM payment
+```
+Or... 
+
+NOTE:<span style="color: orange"> When using WHERE you cannot call on the created variable name (pay_quarter), you have to call on the argument for the variable (EXTRACT(QUARTER FROM payment_date))</span>
+```sql
+SELECT EXTRACT(QUARTER FROM payment_date) AS pay_quarter FROM payment
+WHERE EXTRACT(QUARTER FROM payment_date) = 4
+```
+
+How old is a particular timestamp in regards to our current date?
+
+```sql
+SELECT AGE(payment_date) FROM payment.
+```
+<br />
+<br />
+
+# TO_CHAR()
+
+```sql
+SELECT TO_CHAR(payment_date, 'YYYY/MM/DD HH24:MI:SS') as formatted_time FROM payment
+```
+
+Google 'SQL time formatting' to get a full list of options, there are tons! 
+
+<br /><br />
+<br />
+
+# CHALLENGE!
+
+- During which months did payments occur?
+  -  Format your answer to return back the full month name.
+
+```sql
+SELECT DISTINCT(TO_CHAR(payment_date, 'Month')) payment_date FROM payment
+```
+<details> 
+<summary>Solution: </summary>
+
+![Alt text](image-19.png)
+
+</details>
+
+<br />
+<br />
+
+- How many payments occurred on a Monday?
+  - We had to google the 'dow' function, day-of-week, which pulls out a numeric number (0-6, Sunday-Saturday) for each day of the week.
+ 
+```sql
+SELECT COUNT(EXTRACT(DOW FROM payment_date)) FROM payment
+WHERE EXTRACT(DOW FROM payment_date) = 1
+```
+A cleaner answer would be...
+
+```sql
+SELECT COUNT(*) FROM payment
+WHERE EXTRACT(DOW FROM payment_date) = 1
+```
+
+<br />
+<br />
+<br />
+
+# Mathematical Functions
+[PgSQL Mathematical functions documentation](https://www.postgresql.org/docs/current/functions-math.html)
+
+We're going to go through some mathematical operations where we can add one column, or do something, with column and another (or 2 or 3...)
+
+Back to PgAdmin: What percentage of the replacement cost is a rental rate?
+
+```sql
+SELECT rental_rate/replacement_cost FROM film
+```
+
+
+<details> 
+<summary>Returns: </summary>
+
+![Alt text](image-20.png)
+
+</details>
+
+This is a good start, but it's a long number, not in the right form and for each row of the table... Let's clean it up.
+
+```sql
+SELECT ROUND(rental_rate/replacement_cost, 2)*100 AS percent_cost FROM film
+```
+Now we get back a good looking percent format! (33.00, 28.00, etc)
+
+<br />
+<br />
+<br />
+
+# String Functions and Operators
+
+We can edit, combine, and alter text data columns in PgSql.
+
+[String Functions and Operators documentation](https://www.postgresql.org/docs/16/functions-string.html)
+
+Let's use the customer table.
+
+In PgSQL, we use || as the 'concat' operand, so..
+
+```sql
+SELECT first_name || ' ' || last_name as full_name 
+FROM customer
+```
+You can change the case type of a string easily using UPPER() or LOWER()
+```sql
+SELECT UPPER(first_name) || ' ' || lower(last_name) as full_name FROM customer
+```
+
+What if there were missing emails, but we had the name information used to create the email (in our format)?
+
+```sql
+SELECT first_name || last_name || '@gmail.com' FROM customer
+```
+<details> 
+<summary>Returns: </summary>
+
+![Alt text](image-21.png)
+
+</details>
+
+<br />
+<br />
+
+This is a very basic approach to creating emails. Let's assume we dont want the first letter of the last name capatilized, we only want the first letter for the first name capatalized, and we want '@gmail.com' for each...
+
+```sql
+ SELECT UPPER(LEFT(first_name, 1)) 
+ || LOWER(last_name) 
+ || '@gmail.com' as customer_email 
+ FROM customer
+```
+<details> 
+<summary>Returns: </summary>
+
+![Alt text](image-23.png)
+
+</details>
+<br />
+<br />
+<br />
+
+# Subquery
+
+Sub queries are queries nested inside another query. They allow you to perform complex operations by combining multiple tables and performing calculations on them.
+
+Another way to say it is; A sub query is a query that is nested inside another query and returns one row for each result produced by the outer query.
+
+## selfjoin
