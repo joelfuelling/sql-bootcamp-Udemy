@@ -48,7 +48,7 @@ In general, it is not good practice to use an asterisk(*) in the SELECT statemen
 
 <br />
 
-![Alt text](image.png)
+![Alt text](Images/image.png)
 
 <br />
 <br />
@@ -699,7 +699,7 @@ ORDER BY AVG(replacement_cost)
 <details> 
 <summary>Answer: </summary>
 
-![Alt text](image-2.png)
+![Alt text](Images/Images/image-2.png)
 
 </details>
 
@@ -723,7 +723,7 @@ ORDER BY AVG(replacement_cost)
 <details> 
 <summary>Answer: </summary>
 
-![Alt text](image-3.png)
+![Alt text](Images/image-3.png)
 
 </details>
 
@@ -742,7 +742,7 @@ limit 5
 <details> 
 <summary>Answer: </summary>
 
-![Alt text](image-4.png)
+![Alt text](Images/image-4.png)
 
 </details>
 
@@ -785,7 +785,7 @@ GROUP BY customer_id HAVING SUM(amount) > 100
 <details> 
 <summary>Solution: </summary>
 
-![Alt text](image-5.png)
+![Alt text](Images/image-5.png)
 
 </details>
 
@@ -819,7 +819,7 @@ HAVING COUNT(payment_id) >= 40
 <details> 
 <summary>Solution: </summary>
 
-![Alt text](image-6.png)
+![Alt text](Images/image-6.png)
 
 </details>
 
@@ -839,7 +839,7 @@ ORDER BY SUM(amount)
 <details> 
 <summary>Solution: </summary>
 
-![Alt text](image-7.png)
+![Alt text](Images/image-7.png)
 
 </details>
 
@@ -985,18 +985,18 @@ INNER JOIN TableB
 ON TableA.col_match = TableB.col_match
 ```
 
-![Alt text](image-9.png)
+![Alt text](Images/image-9.png)
 
 <br />
 <br />
 
 ### Working example:
 
-![Alt text](image-10.png)
+![Alt text](Images/image-10.png)
 
 <br />
 
-![Alt text](image-11.png)
+![Alt text](Images/image-11.png)
 
 <br />
 
@@ -1004,7 +1004,7 @@ Now we have A LOT of results! But, we have duplicate name columns (because we se
 
 To clean this up, we can declare specific columns that we want. Below (syntax example), We're saying select 3 things: Registration ID, Login names, and Login ID from the Registrations table. Then, join Logins where the names are equal to each other... However, because 'name' existed in both tables, and as we saw before, it will simply produce both columns with the same 'name' header. <span style="color: orange"> Here, we're only returning the Logins.name column (we could also use registrations.name, it doesn't matter since they're the same)</span>
 
-![Alt text](image-12.png)
+![Alt text](Images/image-12.png)
 
 <br />
 <br />
@@ -1146,7 +1146,7 @@ OR payment.payment_id IS null
 <details> 
 <summary>Solution: </summary>
 
-![Alt text](image-13.png)
+![Alt text](Images/image-13.png)
 
 </details>
  
@@ -1222,7 +1222,7 @@ WHERE Logins.id IS null
 <details> 
 <summary>Visualization: </summary>
 
-![Alt text](image-15.png)
+![Alt text](Images/image-15.png)
 
 </details>
 
@@ -1243,7 +1243,7 @@ WHERE inventory.film_id IS null
 <summary>Solution: </summary>
 
 ### <span style="color: red">Not in inventory!</span>
-![Alt text](image-16.png)
+![Alt text](Images/image-16.png)
 
 </details>
 
@@ -1260,7 +1260,7 @@ You can apply a 'WHERE TableA.id IS null' to either join to exclude the results 
 <details> 
 <summary>Visualization: </summary>
 
-![Alt text](image-17.png)
+![Alt text](Images/image-17.png)
 
 </details>
 
@@ -1309,7 +1309,7 @@ WHERE district = 'California'
 
 <br />
 
-![Alt text](image-18.png)
+![Alt text](Images/image-18.png)
 
 </details>
 
@@ -1495,7 +1495,7 @@ SELECT DISTINCT(TO_CHAR(payment_date, 'Month')) payment_date FROM payment
 <details> 
 <summary>Solution: </summary>
 
-![Alt text](image-19.png)
+![Alt text](Images/image-19.png)
 
 </details>
 
@@ -1535,7 +1535,7 @@ SELECT rental_rate/replacement_cost FROM film
 <details> 
 <summary>Returns: </summary>
 
-![Alt text](image-20.png)
+![Alt text](Images/image-20.png)
 
 </details>
 
@@ -1577,7 +1577,7 @@ SELECT first_name || last_name || '@gmail.com' FROM customer
 <details> 
 <summary>Returns: </summary>
 
-![Alt text](image-21.png)
+![Alt text](Images/image-21.png)
 
 </details>
 
@@ -1595,7 +1595,7 @@ This is a very basic approach to creating emails. Let's assume we dont want the 
 <details> 
 <summary>Returns: </summary>
 
-![Alt text](image-23.png)
+![Alt text](Images/image-23.png)
 
 </details>
 <br />
