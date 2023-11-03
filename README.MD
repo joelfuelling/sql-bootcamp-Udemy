@@ -466,7 +466,7 @@ WHERE first_name LIKE 'J%'
 <br />
 <br />
 
-# <span style="color: purple; font-style: italic">CHALLENGE! 😰</span>
+# <span style="color: purple; font-style: italic">CHALLENGE! (some basics) </span>
 
 1. How many payment transactions were greater than $5.00?
    - ```sql
@@ -803,7 +803,7 @@ HAVING COUNT(customer_id) > 300
 <br />
 <br />
 
-# <span style="color: purple; font-style: italic">Challenge tasks for HAVING 🎒⛏️</span>
+# <span style="color: purple; font-style: italic">CHALLENGE tasks for HAVING 🎒⛏️</span>
 
 We are launching a platinum service for our most loyal customers. We will assign platinum status to customers that have had 40 or more transaction payments.
 
@@ -1050,8 +1050,6 @@ The above only JOINS customers FROM payment who have an existing payment (FROM p
 
 ![Alt text](<Screenshot 2023-10-19 at 2.04.08 PM.png>)
 
-
-
 - There are a few different types of OUTER (OUTER) JOINS
 - They will allow us to specify how to deal with values only present in one of the tables being joined.
 - There are the more complex JOINs, take your time!
@@ -1162,11 +1160,10 @@ SELECT COUNT(DISTINCT customer_id) FROM payment.
 <br />
 <br />
 
-
-
 # LEFT (OUTER) JOIN
 
-NOTE: 
+NOTE:
+
 - <span style="color: lightgreen">With both LEFT and RIGHT JOINS, the order we enter the query now matters, since we have to specify what the left table will be.</span>
 - <span style="color: lightgreen">LEFT OUTER JOIN, and RIGHT OUTER JOIN can both be shorted to simply LEFT JOIN and RIGHT JOIN </span>
 
@@ -1219,6 +1216,7 @@ LEFT OUTER JOIN Logins
 ON Registrations.name = Logins.name
 WHERE Logins.id IS null
 ```
+
 <details> 
 <summary>Visualization: </summary>
 
@@ -1239,10 +1237,12 @@ LEFT JOIN inventory ON
 inventory.film_id = film.film_id
 WHERE inventory.film_id IS null
 ```
+
 <details> 
 <summary>Solution: </summary>
 
 ### <span style="color: red">Not in inventory!</span>
+
 ![Alt text](Images/image-16.png)
 
 </details>
@@ -1255,7 +1255,6 @@ WHERE inventory.film_id IS null
 Essentially the exact same that as a LEFT JOIN, but the tables are switched up... Yes, it is sorta confusing the LEFT JOIN excludes the right table, and the RIGHT JOIN excludes the left table.
 
 You can apply a 'WHERE TableA.id IS null' to either join to exclude the results that match both columns (see below).
-
 
 <details> 
 <summary>Visualization: </summary>
@@ -1282,25 +1281,30 @@ Syntax:
 ```sql
 SELECT * FROM Sales2021_Q1
 UNION
-SELECT * FROM Sales2021_Q2  
+SELECT * FROM Sales2021_Q2
 UNION
 SELECT * FROM Sales2021_Q3
 ORDER BY name
 ```
 
-*** UNION calls don't have a good use case example in the dvdRental examples we've been using so we'll revisit it later on... ***
+**_ UNION calls don't have a good use case example in the dvdRental examples we've been using so we'll revisit it later on... _**
 
-### JOIN Challenge tasks.
+<br />
+<br />
 
-1. California sales tax laws have changed and we need to alert our customers to this through email. 
-  - What are the emails for the customers who live in California?
+# JOIN <span style="color: purple; font-style: italic">CHALLENGE </span> tasks!
+
+1. California sales tax laws have changed and we need to alert our customers to this through email.
+
+- What are the emails for the customers who live in California?
 
 ```sql
 SELECT email, district FROM address
-LEFT JOIN customer 
+LEFT JOIN customer
 ON address.address_id = customer.address_id
 WHERE district = 'California'
 ```
+
 <details> 
 <summary>Solution: </summary>
 
@@ -1316,13 +1320,14 @@ WHERE district = 'California'
 <br />
 
 2. A customer walks in to the store adn there a huge fan of the actor "Nick Wahlberg" and wants to know what movies he is in.
-  - What movies are they in?
 
-We first need to identify what table is the "go between", "link", "bridge", (call it what you want) to get us the information in the prompt. 
+- What movies are they in?
 
-The film table doesn't have direct information for what actors there are, only the title... So, we at least know we'll need the film table 
+We first need to identify what table is the "go between", "link", "bridge", (call it what you want) to get us the information in the prompt.
 
-The actor table has the actor_id, <span style="color: orange">AND </span>the film_actor table has both the actor_id id. 
+The film table doesn't have direct information for what actors there are, only the title... So, we at least know we'll need the film table
+
+The actor table has the actor_id, <span style="color: orange">AND </span>the film_actor table has both the actor_id id.
 
 So, we first join the the film_actor table on the actor on matching actor and film_actor id. This would return the list of matching actor/film ids, but not the titles.
 
@@ -1373,11 +1378,11 @@ TIMESTAMPTZ - Contains date, time, and timezone.
 
 Functions and operations related to these specific data types:
 
-  - TIMEZONE
-  - NOW()
-  - TIMEOFDAY()
-  - CURRENT_TIME
-  - CURRENT_DATE
+- TIMEZONE
+- NOW()
+- TIMEOFDAY()
+- CURRENT_TIME
+- CURRENT_DATE
 
   <br />
   <br />
@@ -1389,45 +1394,56 @@ Let's checkout timezone... (returns 'America/Chicago' format timezone)
 ```sql
 SHOW TIMEZONE
 ```
+
 Returns timezone stamp of the immediate moment.
+
 ```sql
 SELECT NOW()
 ```
 
 If you'd like a more user friendly format,<span style="color: orange"> a literal string interpretation</span> , use TIMEOFDAY()
+
 ```SQL
 SELECT TIMEOFDAY()
 ```
+
 Or, grab the current time
+
 ```sql
 SELECT CURRENT_TIME
 ```
+
 Or, the current date
+
 ```sql
 SELECT CURRENT_DATE
 ```
+
 <br />
 <br />
 
 ## Timestamps and Extracts - Part Two
 
 Let's explore extracting information from a time based data type using:
-  - EXTRACT()
-  - AGE()
-  - TO_CHAR()
+
+- EXTRACT()
+- AGE()
+- TO_CHAR()
 
 <br />
 
 ### EXTRACT()
 
 Allows you to "extract" or obtain a sub-component of a date value.
-  - YEAR
-  - MONTH
-  - DAY
-  - WEEK
-  - QUARTER
+
+- YEAR
+- MONTH
+- DAY
+- WEEK
+- QUARTER
 
 Syntax:
+
 ```sql
 EXTRACT(YEAR FROM date_col)
 ```
@@ -1436,6 +1452,7 @@ EXTRACT(YEAR FROM date_col)
 
 Calculates and returns the current age given a timestamp
 Syntax:
+
 ```sql
 AGE(date_col)
 ```
@@ -1446,6 +1463,7 @@ AGE(date_col)
 
 General function to convert data types to text. Very useful for timestamp formatting.
 Syntax:
+
 ```sql
 TO_CHAR(date_col, 'mm-dd-yyyy')
 ```
@@ -1453,13 +1471,16 @@ TO_CHAR(date_col, 'mm-dd-yyyy')
 <br />
 <br />
 
-A working example  would be...
+A working example would be...
+
 ```sql
 SELECT EXTRACT(YEAR FROM payment_date) AS pay_year FROM payment
 ```
-Or... 
+
+Or...
 
 NOTE:<span style="color: orange"> When using WHERE you cannot call on the created variable name (pay_quarter), you have to call on the argument for the variable (EXTRACT(QUARTER FROM payment_date))</span>
+
 ```sql
 SELECT EXTRACT(QUARTER FROM payment_date) AS pay_quarter FROM payment
 WHERE EXTRACT(QUARTER FROM payment_date) = 4
@@ -1470,6 +1491,7 @@ How old is a particular timestamp in regards to our current date?
 ```sql
 SELECT AGE(payment_date) FROM payment.
 ```
+
 <br />
 <br />
 
@@ -1479,19 +1501,20 @@ SELECT AGE(payment_date) FROM payment.
 SELECT TO_CHAR(payment_date, 'YYYY/MM/DD HH24:MI:SS') as formatted_time FROM payment
 ```
 
-Google 'SQL time formatting' to get a full list of options, there are tons! 
+Google 'SQL time formatting' to get a full list of options, there are tons!
 
 <br /><br />
 <br />
 
-# CHALLENGE!
+# <span style="color: purple; font-style: italic">CHALLENGE! (timestamps, operators) </span>
 
 - During which months did payments occur?
-  -  Format your answer to return back the full month name.
+  - Format your answer to return back the full month name.
 
 ```sql
 SELECT DISTINCT(TO_CHAR(payment_date, 'Month')) payment_date FROM payment
 ```
+
 <details> 
 <summary>Solution: </summary>
 
@@ -1504,11 +1527,12 @@ SELECT DISTINCT(TO_CHAR(payment_date, 'Month')) payment_date FROM payment
 
 - How many payments occurred on a Monday?
   - We had to google the 'dow' function, day-of-week, which pulls out a numeric number (0-6, Sunday-Saturday) for each day of the week.
- 
+
 ```sql
 SELECT COUNT(EXTRACT(DOW FROM payment_date)) FROM payment
 WHERE EXTRACT(DOW FROM payment_date) = 1
 ```
+
 A cleaner answer would be...
 
 ```sql
@@ -1521,6 +1545,7 @@ WHERE EXTRACT(DOW FROM payment_date) = 1
 <br />
 
 # Mathematical Functions
+
 [PgSQL Mathematical functions documentation](https://www.postgresql.org/docs/current/functions-math.html)
 
 We're going to go through some mathematical operations where we can add one column, or do something, with column and another (or 2 or 3...)
@@ -1530,7 +1555,6 @@ Back to PgAdmin: What percentage of the replacement cost is a rental rate?
 ```sql
 SELECT rental_rate/replacement_cost FROM film
 ```
-
 
 <details> 
 <summary>Returns: </summary>
@@ -1544,6 +1568,7 @@ This is a good start, but it's a long number, not in the right form and for each
 ```sql
 SELECT ROUND(rental_rate/replacement_cost, 2)*100 AS percent_cost FROM film
 ```
+
 Now we get back a good looking percent format! (33.00, 28.00, etc)
 
 <br />
@@ -1561,10 +1586,12 @@ Let's use the customer table.
 In PgSQL, we use || as the 'concat' operand, so..
 
 ```sql
-SELECT first_name || ' ' || last_name as full_name 
+SELECT first_name || ' ' || last_name as full_name
 FROM customer
 ```
+
 You can change the case type of a string easily using UPPER() or LOWER()
+
 ```sql
 SELECT UPPER(first_name) || ' ' || lower(last_name) as full_name FROM customer
 ```
@@ -1574,6 +1601,7 @@ What if there were missing emails, but we had the name information used to creat
 ```sql
 SELECT first_name || last_name || '@gmail.com' FROM customer
 ```
+
 <details> 
 <summary>Returns: </summary>
 
@@ -1587,11 +1615,12 @@ SELECT first_name || last_name || '@gmail.com' FROM customer
 This is a very basic approach to creating emails. Let's assume we dont want the first letter of the last name capatilized, we only want the first letter for the first name capatalized, and we want '@gmail.com' for each...
 
 ```sql
- SELECT UPPER(LEFT(first_name, 1)) 
- || LOWER(last_name) 
- || '@gmail.com' as customer_email 
+ SELECT UPPER(LEFT(first_name, 1))
+ || LOWER(last_name)
+ || '@gmail.com' as customer_email
  FROM customer
 ```
+
 <details> 
 <summary>Returns: </summary>
 
@@ -1611,25 +1640,30 @@ Another way to say it is; A sub query is a query that is nested inside another q
 <br />
 
 We know how to grab all the info from a table...
+
 ```sql
 SELECT student_grade FROM test_scores
 ```
+
 And how to get the AVG() of some info.
+
 ```sql
 SELECT AVG(student_scores) FROM test_scores
 ```
+
  <br />
 
-How can we get a list of students who scored BETTER than the average grade? 
+How can we get a list of students who scored BETTER than the average grade?
+
 - By placing a 2nd SELECT statement as the "less than" returned condition in the WHERE statement below, wrapped inside parenthesis.
 
 ```sql
-SELECT student,grade 
+SELECT student,grade
 FROM test_scores
 WHERE grade > (SELECT AVG(grade) FROM test_scores)
 ```
 
-Above, the <span style="color: lightGreen"> subquery ((SELECT AVG(grade) FROM test_scores)) is performed first</span> since it is inside the parenthesis. 
+Above, the <span style="color: lightGreen"> subquery ((SELECT AVG(grade) FROM test_scores)) is performed first</span> since it is inside the parenthesis.
 
 <br />
 
@@ -1640,7 +1674,7 @@ REMEMBER: <span style="color: orange"> You can also use the IN operator in conju
 
 A subquery can operate on a separate table:
 
- Below, the separate select narrows down the overall return to only contain students that are in both the test_scores and honor_roll_table.
+Below, the separate select narrows down the overall return to only contain students that are in both the test_scores and honor_roll_table.
 
 ```sql
 SELECT student, grade FROM test_scores
@@ -1657,14 +1691,13 @@ The EXISTS operator is used to test for the existence of any rows returned by a 
 Syntax:
 
 ```sql
-SELECT column_name FROM table_name 
-WHERE EXISTS 
+SELECT column_name FROM table_name
+WHERE EXISTS
 (SELECT column_name FROM table_name WHERE ~condition goes here~)
 ```
 
 <br />
 <br />
-
 
 OK - Back to subquerys. To set one up first, create the subquery. Then, wrap it in parenthesis and place it at the end of your query with a line above it.
 
@@ -1674,9 +1707,11 @@ OK - Back to subquerys. To set one up first, create the subquery. Then, wrap it 
 ```
 
 Then, add in the large (top-level) query to get your columns and table...
-  - This first gets the average rental_rate from film, then returns the title and rental rate of films where the rental rate is higher than the average.
+
+- This first gets the average rental_rate from film, then returns the title and rental rate of films where the rental rate is higher than the average.
+
 ```sql
-SELECT title, rental_rate 
+SELECT title, rental_rate
 FROM film
 WHERE rental_rate >
 (SELECT AVG(rental_rate) FROM film)
@@ -1688,7 +1723,6 @@ WHERE rental_rate >
 <span style="font-Size: 36px">NOTE: <span style="color: lightGreen"> If your subquery returns multiple values, you'll have to use the IN operator!</span>
 
 <br />
-
 
 Let's see this in combination with a join...
 
@@ -1703,25 +1737,27 @@ Next, we want to join the inventory table on matching inventory ids to make sure
 
 ```sql
 SELECT inventory.film_id FROM rental
-INNER JOIN inventory 
+INNER JOIN inventory
 ON inventory.inventory_id = rental.inventory_id
 WHERE return_date BETWEEN '2005-05-29' AND '2005-05-30'
 ```
 
 Great! Now what would be the easiest way to just get the title information of these films added? (What section are we in?!) That's right, wrap the query below in parenthesis and make it the subquery with the line above it, then create the top-level query to get the film id titles included IN the subquery.
 
-Remember, we want the title of the film ids where the di is in the subquery...
+<span style="color: lightGreen">Remember</span>, we want the title of the film ids where the id is in the subquery...
+
 ```sql
 SELECT title, film_id FROM film
 WHERE film_id IN
 (SELECT inventory.film_id FROM rental
-INNER JOIN inventory 
+INNER JOIN inventory
 ON inventory.inventory_id = rental.inventory_id
 WHERE return_date BETWEEN '2005-05-29' AND '2005-05-30')
 ```
 
 using EXISTS(), we can find the customers who have at least 1 payment that's greater than 11. We want both the first and last names... What tables need accessed to get all required information?
-  - You could also use NOT before EXISTS() to return all the customers who have not met the subquery condition.
+
+- You could also use NOT before EXISTS() to return all the customers who have not met the subquery condition.
 
 ```sql
 SELECT first_name, last_name FROM customer AS c
@@ -1730,6 +1766,7 @@ SELECT * FROM payment AS p
 WHERE c.customer_id = p.customer_id
 AND amount > 11)
 ```
+
 <details> 
 <summary>Returns: </summary>
 
@@ -1739,23 +1776,22 @@ AND amount > 11)
 <br />
 <br />
 
-
-## CHALLENGE!
+# <span style="color: purple; font-style: italic">CHALLENGE! </span>
 
 Try to do the same, but only with customers from California.
 
 ```sql
 SELECT first_name, last_name FROM customer AS c
 WHERE EXISTS(
-	SELECT * 
+	SELECT *
 	FROM payment AS p
 	WHERE c.customer_id = p.customer_id
-	AND amount > 11 
+	AND amount > 11
 	AND EXISTS(
-		SELECT * 
+		SELECT *
 		FROM address AS ad
 		JOIN address
-		ON c.address_id = ad.address_id 
+		ON c.address_id = ad.address_id
 		WHERE address.district LIKE 'California')
 )
 ```
@@ -1763,17 +1799,14 @@ WHERE EXISTS(
 <br />
 <br />
 
-
-
-
-
 How can we double check this? We did a quick manual check of the # of customers total from California and there are 9.
 <br />
 <br />
 
 # self-join
 
-A self-join in SQL is a join operation where a table is joined with itself. This is typically done by creating two or more aliases for the same table and specifying how the rows in the same table relate to each other. Self-joins are useful in situations where you need to compare and retrieve data from the same table based on some relationship between rows within that table. Here's the syntax for a self-join:
+A self-join in SQL is a join operation where a table is joined with itself. This is done by creating <span style="color: orange">two or more aliases for the same table and specifying how the rows in the same table relate to each other</span>. Self-joins are useful in situations where you need to compare and retrieve data from the same table based on some relationship between rows within that table. Here's the syntax for a self-join:
+
 ```sql
 SELECT t1.column1, t2.column2
 FROM table_name AS t1
@@ -1789,14 +1822,9 @@ There is no special keyword for a self join, its simply standard JOIN syntax wit
 <br />
 <br />
 
-
 Let's explore a more realistic situation of when you would us a self-join!
 
-
-
 You have a company and some employees, and employees have to send reports to other employees (below). We can see that Andrew sends a report to report_id 3, which is Charlie (emp_id = 3). Following this, you can see who see who sends reports to who.
-
-
 
 ![Alt text](image-3.png)
 
@@ -1805,14 +1833,14 @@ You have a company and some employees, and employees have to send reports to oth
 Let's show the results of the employee name, and their reports recipient name:
 
 ```sql
-SELECT emp.name, report.name 
+SELECT emp.name, report.name
 FROM employees as emp
 JOIN employees as report ON
 emp.emp_id = report.report_id;
 ```
+
 <details> 
 <summary>Returns (➡): </summary>
-
 
 ![Alt text](image-4.png)
 
@@ -1826,14 +1854,16 @@ emp.emp_id = report.report_id;
 Find all the PAIRS of films that have the same length (as the initial one at the top of each category, ie each different length)
 
 To start...
+
 ```sql
 SELECT * FROM film
 WHERE length = 117
 ```
+
 <details>
   <summary>Returns:</summary>
 
-  ![Alt text](image-5.png)
+![Alt text](image-5.png)
 
 </details>
 
@@ -1842,10 +1872,317 @@ WHERE length = 117
 Now, using aliases we want to pair each with the movie where the ON identifies film ids that are different from the first, and where both are the same length, all from the same table.
 
 ```sql
-SELECT f1.title, f2.title, f1.length 
+SELECT f1.title, f2.title, f1.length
 FROM film AS f1
-INNER JOIN film AS f2 
+INNER JOIN film AS f2
 ON f1.film_id != f2.film_id
 AND f1.length = f2.length
 ```
 
+<details>
+  <summary>Returns:</summary>
+
+![Alt text](image-6.png)
+
+</details>
+
+<br />
+<br />
+<br />
+
+# Restoring Database Exercises
+
+This new database has a public and cd schema. Meaning, the queries for the FROM tables will have cd. in front of them, for example:
+
+```sql
+SELECT * FROM cd.bookings
+```
+
+NOTE: <span style="color: lightGreen">The exercise.tar file ( available through paid Udemy course, or the Google drive download link below) will be used for this portion of the course.</span>
+
+[.tar file download](https://drive.google.com/file/d/1wDqIK6zt5twWnCOx97ywipaiWR2d0OfT/view)
+
+Once this is added, restored, and refreshed in PgAdmin ([quick setup video!](https://www.youtube.com/watch?v=obnRGVXmeyE)) you'll notice there are 2 schemas. One public, and one cd.
+
+```sql
+SELECT * FROM cd.bookings
+```
+
+This database is like a "gym", with facility info, booking information, and members. Some fields may be null...
+
+For this portion we're going to use the Google link provided ([ SQL Assessment Test 2
+Questions and Expected Results
+](https://docs.google.com/document/d/1wiuYbTQslmfolQWgeVPB356csjK6yqOUBhgC7fM44o8/edit)) so you can test yourself with the new table information using the notes taken above.
+
+Try to think first about how you would construct your query. Does it need a subquery? How many tables (therefore, joins) are needed to gather the necessary columns? Do you need to find all of a match, or everything but the match?
+
+Read the questions carefully and take your time, this is designed to be somewhat challenging so you can work through and solidify what's already been presented.
+
+NOTE: Keep in mind there is usually more than one way to answer these questions. For the solutions you can visit this link ([answers](https://docs.google.com/document/d/1swGZ0RG3KKqWqzmsI_qrMgjJ3lt39mtAJqRSMZy6Z-8/edit?usp=sharing))
+
+<br />
+<br />
+<br />
+<br />
+
+# <span style="color: purple">Quiz time!
+
+![Alt text](image-7.png)
+
+<br />
+
+1. How can you retrieve all the information from the cd.facilities table?
+   Expected Result should look similar to this (with more rows):
+
+Answer:
+
+```sql
+SELECT * FROM cd.facilities
+```
+
+<br />
+<br />
+
+2. You want to print out a list of all of the facilities and their cost to members. How would you retrieve a list of only facility names and costs?
+
+Answer: (Below, we're actually using the AS shorthand which is simply not including the AS before the new variable names, <span style="color: orange">facility_name and guest_cost)</span>
+
+```sql
+SELECT cd.facilities.name facility_name, cd.facilities.guestcost guest_cost FROM cd.facilities
+ORDER BY guest_cost
+```
+
+<details>
+  <summary>Returns:</summary>
+
+![Alt text](image-8.png)
+
+</details>
+
+<br />
+<br />
+
+3. How can you produce a list of facilities that charge a fee to members?
+
+```sql
+SELECT * FROM cd.facilities
+WHERE cd.facilities.membercost > 0
+```
+
+<details>
+  <summary>Returns:</summary>
+
+![Alt text](image-9.png)
+
+</details>
+
+<br />
+<br />
+
+4. How can you produce a list of facilities that charge a fee to members, and that fee is less than 1/50th of the monthly maintenance cost?
+
+Return the facility_id, fac_name, membercost, and monthly maintenance cost.
+
+```sql
+SELECT facid, name, membercost, monthlymaintenance
+FROM cd.facilities
+WHERE membercost > 0 AND
+(membercost < monthlymaintenance/50.0);
+```
+
+<details>
+  <summary>Returns:</summary>
+
+![Alt text](image-10.png)
+
+</details>
+
+<br />
+<br />
+
+5. how can you produce a list of all facilities with the word 'Tennis' in their name?
+
+```sql
+SELECT * FROM cd.facilities
+WHERE cd.facilities.name ILIKE '%Tennis%'
+```
+
+<details>
+  <summary>Returns:</summary>
+
+![Alt text](image-11.png)
+
+</details>
+
+<br />
+<br />
+
+6. How can you retrieve the details of facilities with ID 1 and 5? Try to do without using the OR operator
+
+```sql
+SELECT * FROM cd.facilities
+WHERE facid IN (1,5)
+```
+
+<details>
+  <summary>Returns:</summary>
+
+![Alt text](image-12.png)
+
+</details>
+
+<br />
+<br />
+
+7. How can you produce a list of members who joined after the start of September 2012?
+
+- Return the memid, surname, firstname, and joindate of the members in question.
+
+```sql
+SELECT memid, surname, firstname, joindate FROM cd.members
+WHERE joindate > '08-31-2012'
+ORDER BY joindate
+```
+
+<details>
+  <summary>Returns:</summary>
+
+![Alt text](<Screenshot 2023-10-24 at 1.07.42 PM 1.png>)
+
+</details>
+
+<br />
+<br />
+
+8. How can you produce an ordered list of the first 10 surnames in the members table? The list must not contain duplicates.
+
+- Expected result should be 10 rows if you include GUEST as a last name.
+
+```sql
+SELECT DISTINCT(cd.members.surname) FROM cd.members
+ORDER BY surname
+LIMIT 10
+```
+
+<details>
+  <summary>Returns:</summary>
+
+![Alt text](image-13.1.png)
+
+</details>
+
+<br />
+<br />
+
+9. You'd like to get the sign-up date of your last member. How can you retrieve this information?
+
+```sql
+SELECT cd.members.joindate first_mem_joined FROM cd.members
+ORDER BY cd.members.joindate DESC
+LIMIT 1
+```
+
+<details>
+  <summary>Returns:</summary>
+
+![Alt text](image-14.1.png)
+
+</details>
+
+<br />
+<br />
+
+10. Produce a count of the number of facilities that have a cost to guests of 10 or more.
+
+```sql
+SELECT COUNT(cd.facilities.guestcost) AS num_of_fac_cost_over_10 FROM cd.facilities
+WHERE cd.facilities.guestcost > 10
+```
+
+<details>
+  <summary>Returns:</summary>
+
+![Alt text](image-15.1.png)
+
+</details>
+
+<br />
+<br />
+
+11. Produce a list of the total number of slots booked per facility in the month of september 2012. Produce an output table consisting of facility id and slots, sorted by the number of slots.
+
+```sql
+SELECT cd.bookings.facid, SUM(cd.bookings.slots) AS sept_slots FROM cd.bookings
+WHERE EXTRACT(MONTH FROM cd.bookings.starttime) = 9
+GROUP BY cd.bookings.facid ORDER BY sept_slots
+```
+
+<details>
+  <summary>Returns:</summary>
+
+![Alt text](image-16.1.png)
+
+</details>
+
+<br />
+<br />
+
+12. Produce a list of facilities with more than 1000 slots booked. Produce an output table consisting of facility id and total slots, sorted by facility id.
+
+```sql
+SELECT cd.bookings.facid, SUM(cd.bookings.slots) FROM cd.bookings
+GROUP BY cd.bookings.facid
+HAVING SUM(cd.bookings.slots) > 1000
+ORDER BY cd.bookings.facid
+
+```
+
+<details>
+  <summary>Returns:</summary>
+
+![Alt text](image-17.1.png)
+
+</details>
+
+<br />
+<br />
+
+13. Produce a list of the start times for bookings for tennis courts, for the date '2012-09-21'. Return a list of start time and facility name pairings, ordered by the time.
+
+```sql
+SELECT starttime, facilities.name FROM cd.bookings
+JOIN cd.facilities ON bookings.facid = facilities.facid
+WHERE DATE(starttime) = '2012-09-21' AND facilities.name LIKE '%Tennis Court%'
+ORDER BY starttime
+```
+
+<details>
+  <summary>Returns:</summary>
+
+
+![Alt text](image-18.1.png)
+
+</details>
+
+<br />
+<br />
+
+14. How can you produce a list of the start time for bookings by members name 'David Farrell'?
+
+```sql
+SELECT starttime, members.firstname FROM cd.bookings
+JOIN cd.members ON bookings.memid = members.memid
+WHERE members.firstname = 'David'
+AND members.surname = 'Farrell'
+```
+
+<details>
+  <summary>Returns: </summary>
+(34 rows total)
+
+![Alt text](image-19.1.png)
+
+</details>
+
+<br />
+<br />
