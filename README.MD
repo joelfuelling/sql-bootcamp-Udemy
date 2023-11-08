@@ -1817,7 +1817,7 @@ INNER JOIN table_name AS t2 ON t1.related_column = t2.related_column;
 
 There is no special keyword for a self join, its simply standard JOIN syntax with the same table in both parts. However, because you're using the same table you <span style="color: orange"> you must use an alias to differentiate between the original and "copy"</span> (not an actual copy, it's just pulled twice)
 
-![Alt text](image-1.png)
+![Alt text](Images/image-1.1.png)
 
 <br />
 <br />
@@ -1826,7 +1826,7 @@ Let's explore a more realistic situation of when you would us a self-join!
 
 You have a company and some employees, and employees have to send reports to other employees (below). We can see that Andrew sends a report to report_id 3, which is Charlie (emp_id = 3). Following this, you can see who see who sends reports to who.
 
-![Alt text](image-3.png)
+![Alt text](Images/image-3.1.png)
 
 <br />
 
@@ -1842,7 +1842,7 @@ emp.emp_id = report.report_id;
 <details> 
 <summary>Returns (➡): </summary>
 
-![Alt text](image-4.png)
+![Alt text](Images/image-4.1.png)
 
 </details>
 
@@ -1860,13 +1860,6 @@ SELECT * FROM film
 WHERE length = 117
 ```
 
-<details>
-  <summary>Returns:</summary>
-
-![Alt text](image-5.png)
-
-</details>
-
 <BR />
 
 Now, using aliases we want to pair each with the movie where the ON identifies film ids that are different from the first, and where both are the same length, all from the same table.
@@ -1882,7 +1875,7 @@ AND f1.length = f2.length
 <details>
   <summary>Returns:</summary>
 
-![Alt text](image-6.png)
+![Alt text](Images/image-6.1.png)
 
 </details>
 
@@ -1927,9 +1920,7 @@ NOTE: Keep in mind there is usually more than one way to answer these questions.
 
 # <span style="color: purple">Quiz time!
 
-![Alt text](image-7.png)
 
-<br />
 
 1. How can you retrieve all the information from the cd.facilities table?
    Expected Result should look similar to this (with more rows):
@@ -1940,7 +1931,7 @@ Answer:
 SELECT * FROM cd.facilities
 ```
 
-<br />
+
 <br />
 
 2. You want to print out a list of all of the facilities and their cost to members. How would you retrieve a list of only facility names and costs?
@@ -1955,11 +1946,11 @@ ORDER BY guest_cost
 <details>
   <summary>Returns:</summary>
 
-![Alt text](image-8.png)
+![Alt text](Images/image-8.1.png)
 
 </details>
 
-<br />
+
 <br />
 
 3. How can you produce a list of facilities that charge a fee to members?
@@ -1972,16 +1963,16 @@ WHERE cd.facilities.membercost > 0
 <details>
   <summary>Returns:</summary>
 
-![Alt text](image-9.png)
+![Alt text](Images/image-9.1.png)
 
 </details>
 
-<br />
+
 <br />
 
 4. How can you produce a list of facilities that charge a fee to members, and that fee is less than 1/50th of the monthly maintenance cost?
 
-Return the facility_id, fac_name, membercost, and monthly maintenance cost.
+Return the facility_id, fac_name, member cost, and monthly maintenance cost.
 
 ```sql
 SELECT facid, name, membercost, monthlymaintenance
@@ -1993,11 +1984,11 @@ WHERE membercost > 0 AND
 <details>
   <summary>Returns:</summary>
 
-![Alt text](image-10.png)
+![Alt text](Images/image-10.1.png)
 
 </details>
 
-<br />
+
 <br />
 
 5. how can you produce a list of all facilities with the word 'Tennis' in their name?
@@ -2010,12 +2001,12 @@ WHERE cd.facilities.name ILIKE '%Tennis%'
 <details>
   <summary>Returns:</summary>
 
-![Alt text](image-11.png)
+![Alt text](Images/image-11.1.png)
 
 </details>
 
 <br />
-<br />
+
 
 6. How can you retrieve the details of facilities with ID 1 and 5? Try to do without using the OR operator
 
@@ -2027,12 +2018,12 @@ WHERE facid IN (1,5)
 <details>
   <summary>Returns:</summary>
 
-![Alt text](image-12.png)
+![Alt text](Images/image-12.1.png)
 
 </details>
 
 <br />
-<br />
+
 
 7. How can you produce a list of members who joined after the start of September 2012?
 
@@ -2047,12 +2038,12 @@ ORDER BY joindate
 <details>
   <summary>Returns:</summary>
 
-![Alt text](<Screenshot 2023-10-24 at 1.07.42 PM 1.png>)
+![Alt text](<Images/Screenshot 2023-10-24 at 1.07.42 PM 1.png>)
 
 </details>
 
 <br />
-<br />
+
 
 8. How can you produce an ordered list of the first 10 surnames in the members table? The list must not contain duplicates.
 
@@ -2072,7 +2063,7 @@ LIMIT 10
 </details>
 
 <br />
-<br />
+
 
 9. You'd like to get the sign-up date of your last member. How can you retrieve this information?
 
@@ -2090,7 +2081,7 @@ LIMIT 1
 </details>
 
 <br />
-<br />
+
 
 10. Produce a count of the number of facilities that have a cost to guests of 10 or more.
 
@@ -2107,7 +2098,7 @@ WHERE cd.facilities.guestcost > 10
 </details>
 
 <br />
-<br />
+
 
 11. Produce a list of the total number of slots booked per facility in the month of september 2012. Produce an output table consisting of facility id and slots, sorted by the number of slots.
 
@@ -2125,7 +2116,7 @@ GROUP BY cd.bookings.facid ORDER BY sept_slots
 </details>
 
 <br />
-<br />
+
 
 12. Produce a list of facilities with more than 1000 slots booked. Produce an output table consisting of facility id and total slots, sorted by facility id.
 
@@ -2145,7 +2136,7 @@ ORDER BY cd.bookings.facid
 </details>
 
 <br />
-<br />
+
 
 13. Produce a list of the start times for bookings for tennis courts, for the date '2012-09-21'. Return a list of start time and facility name pairings, ordered by the time.
 
@@ -2165,7 +2156,7 @@ ORDER BY starttime
 </details>
 
 <br />
-<br />
+
 
 14. How can you produce a list of the start time for bookings by members name 'David Farrell'?
 
@@ -2186,3 +2177,188 @@ AND members.surname = 'Farrell'
 
 <br />
 <br />
+<br />
+<br />
+
+# Creating Database and Tables
+
+We've only focused on querying and reading data from existing tables thus far.
+
+Section overview:
+  - Data Types
+  - Primary and Foreign Keys
+  - Constraints
+  - CREATE
+  - INSERT
+  - UPDATE
+  - DELETE, ALTER, DROP
+
+  <br />
+
+  We'll first focus on learning a few theoretical concepts, such as choosing the correct data types for a stored value and setting possible constraints on it.
+
+  Also, primary and foreign keys.
+
+  <br />
+
+  ## Data Types
+
+  <br />
+
+  We've already encountered numerous data types.
+
+  - Boolean
+    - True or False
+  - Character 
+    - char, varchar, and text
+  - Numeric
+    - integer, and floating-point number
+  - Temporal
+    date, time, timestamp, and interval
+
+<br />
+
+Less common ones...
+
+- UUID
+  - Universally Unique Identifiers
+- Array
+  - Stores an array of strings, numbers, etc.
+- JSON
+- Hstore key-value pair
+- Special types such as network address and geometric data.
+
+<br />
+
+For example, using a phone number. Do we want to store it as numeric? If so, which type of numeric? 'bigint' would be the obvious choice, but what is actually best for the situation? 
+
+Use Google to search for "best practice, phone number, SQL" and go from there based off what the community says.
+
+Stack Overflow discussion link: ["What datatype should be used for storing phone numbers in SQL Server"?](https://stackoverflow.com/questions/75105/what-datatype-should-be-used-for-storing-phone-numbers-in-sql-server-2005)
+
+These are just phone numbers that do not get any arithmetic done on them at all. So, let's actually use a VARCHAR data type!
+
+When creating a database and table, take the time to plan for long term storage. You can always remove historical information, but you cannot go back and add. <span style="color: orange">Always record more information, not less!</span>
+
+
+To decide what data types to use, review the docs: https://www.postgresql.org/docs/current/datatype.html
+
+![Alt text](image-20.1.png)
+
+<br />
+<br />
+<br />
+
+# Primary and Foreign Keys
+
+### Primary Key
+
+  - Definition: A primary key is a column or a set of columns that uniquely identify each record in a table.
+  - Uniqueness: Each value in the primary key column must be unique; <span style="color: rgba(200,50,50,1)">it cannot contain NULL values.</span>
+  - Purpose:
+Uniquely identifies each record within the table.
+Acts as a unique identifier for a table's records.
+  - Constraints:
+Only one primary key is allowed per table.
+It can comprise one or multiple columns.
+  - Example: In a table of 'customers', the 'customer_id' column might be the primary key, ensuring each customer has a unique identification number.
+
+
+<br />
+
+<details> 
+  <summary><span style="color: lightGreen">See PgAdmin visual PK representation (customer_id, [PK] integer): </summary>
+
+  ![Alt text](image-21.1.png)
+
+</details>
+
+<br /><br />
+
+### Foreign Key
+  - Definition: A foreign key is a column or set of columns in a table that establishes a link between data in two tables.
+    - The table that contains the foreign key is called referencing table or <span style="color: orange"> child table.</span>
+    - The table to which the foreign key references is called referenced table or <span style="color: orange">parent table</span>.
+  - Relationship: It creates a relationship between this column and the primary key of another table.
+    - Recall in the dvdrental database payment table, each payment row had its unique payment_id( a primary key) and identified the customer that made the payment through the customer_id (a foreign key, since it references the customer tables primary key)
+  - Purpose:
+Maintains referential integrity between tables.
+Defines a relationship between two tables, referencing the primary key in another table.
+  - Constraints:
+Values in the foreign key column must either match a value in the primary key column of the referenced table or be NULL.
+  - Example: In a 'Payment' table, a 'customer ID' column could be a foreign key, referencing the 'customer ID' in the 'Payments' table, linking each payment to the customer.
+
+
+<br />
+
+<details> 
+  <summary><span style="color: lightGreen">See PgAdmin visual representation of multiple foreign keys within one table: </summary>
+
+  ![Alt text](image-22.1.png)
+
+</details>
+  
+
+<br />
+<br />
+
+## Key Differences
+  - Uniqueness:
+
+      Primary keys must be unique within their table.
+      Foreign keys maintain referential integrity by referencing the primary key in another table.
+  - Purpose:
+      Primary keys identify unique records within a table.
+      Foreign keys establish and maintain relationships between tables.
+  - Constraints:
+      <span style="color: orange">Primary keys do not allow NULL values.
+      Foreign keys can contain NULL values, allowing for optional relationships between tables.</span>
+    - For example: in our dvdrental database we saw customers had a unique, non-null customer_id column as their primary key.
+      <details> 
+        <summary>See PgAdmin visual PK representation for the example above: </summary>
+
+        
+
+        ![Alt text](image-21.1.png)
+
+      </details>
+    
+    <br />
+      
+In summary, primary keys uniquely identify records within a table, while foreign keys create relationships between tables by referencing the primary key of another table, ensuring data consistency and integrity.
+
+When creating tables and defining columns, we can use constraints to define columns as being a primary key, or attaching a foreign key relationship to another table.
+
+<br />
+<br />
+<br />
+
+What if we want to view to view a list of the relationships of PKs and FKs for a given table? 
+
+In Pg Admin, you can go to: Schemas > Tables > desired_table > Constraints, and then view the PK shown in gold, and the FKs shown as double grey keys.
+
+<details> 
+  <summary>PgAdmin view for PK and FK relationship constraints </summary>
+
+  ![Alt text](image-23.1.png)
+
+</details>
+
+<br />
+<br />
+
+From there, select one of the foreign keys and click on the 'Dependencies' tab to the right. It will show you a list of the dependencies for that particular column and alert you to what tables its referencing.
+![Alt text](image-24.1.png)
+
+<br />
+
+You can also right click the constraint, click on the 'Columns' tab, and it will tell you what it's referencing.
+
+![Alt text](<Screenshot 2023-11-08 at 4.10.49 PM.png>)
+
+
+
+
+
+
+
